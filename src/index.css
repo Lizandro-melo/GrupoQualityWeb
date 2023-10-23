@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300&family=Sarabun:wght@700&display=swap');
+
+.h-tabela {
+  height: 700px;
+  width: 98%;
+}
+
+.kanit {
+  font-family: 'Kanit', sans-serif;
+}
+
+/* 
+
+Certas classes definidas para coisas especificas
+
+
+*/
+
+.left-Button-sair {
+  bottom: 15%;
+}
+
+.pedido {
+  max-width: 200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.c-pedido {
+  width: 300px;
+}
+
+.c-setor {
+  width: 100px;
+}
+
+.c-responsavel {
+  width: 200px;
+}
+
+.c-datahora {
+  width: 200px;
+}
+
+.c-status {
+  width: 40px;
+}
+
+.coluna-nav {
+  width: 68px;
+  background: linear-gradient( #1E2D5E 0%, #172554 48%, white 100%);
+}
