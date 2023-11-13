@@ -1,6 +1,7 @@
 import { Component } from "react";
 import ModuleHeader from "../../Header/ModuleHeader";
 import SistemaRhMain from "./SistemaRhMain";
+import ReactModal from "react-modal";
 
 
 export default class SistemaRhModule extends Component {
@@ -12,6 +13,7 @@ export default class SistemaRhModule extends Component {
             <section className=" flex flex-col w-full h-screen">
                 <ModuleHeader />
                 <SistemaRhMain />
+               
             </section>
         )
     }

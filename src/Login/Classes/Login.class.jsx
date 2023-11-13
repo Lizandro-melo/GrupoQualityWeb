@@ -9,7 +9,7 @@ export class RequestsLogin {
             login: obj.state.login.toLowerCase(),
             senha: obj.state.senha,
         };
-        const url = `https://localhost:8081/login/autenticar`;
+        const url = `https://qualityserver12:8081/login/autenticar`;
         await axios.post(url, data).then((data) => {
             const required = data.data
             const user = {
@@ -17,11 +17,8 @@ export class RequestsLogin {
                 nome: required[0].nome,
                 sobrenome: required[0].sobrenome,
                 setor: required[0].setor,
-                master: required[0].master,
-                cadastro: required[0].adm,
-                sistema_estoque: required[0].sistema_estoque,
-                sac: required[0].sac,
-                status: required[0].status,
+                rolePrimary: required[0].rolePrimary,
+                roleSecondary: required[0].roleSecondary,
             };
             if (user.status === 0) {
                 obj.setState({
@@ -69,7 +66,7 @@ export class RequestsLogin {
             os: `A funcionaria(o) ${obj.state.nome} do setor ${obj.state.setor} esqueceu a senha do sistema! RAMAL: ${obj.state.ramal}`,
             status: "ABERTO",
         };
-        const url = `https://localhost:8081/chamadas/pedido`;
+        const url = `https://qualityserver12:8081/chamadas/pedido`;
         axios.post(url, date).then(() => {
             obj.setState({
                 mensagem:

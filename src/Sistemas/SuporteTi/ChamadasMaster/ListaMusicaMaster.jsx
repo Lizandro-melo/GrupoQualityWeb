@@ -1,22 +1,28 @@
 import axios from "axios";
 import { Component } from "react";
 import ReactModal from "react-modal";
+import Cookies from "js-cookie";
 import iconPendente from "../../../img/icon/tickets256x.png";
 import iconAndamento from "../../../img/icon/clock256x.png";
 import iconFinalizado from "../../../img/icon/check256x.png";
-import Cookies from "js-cookie";
 import iconAnexo from "../../../img/icon/anexo.png";
 import iconDownload from "../../../img/icon/icon_download.png";
 import { RequestsSuporteTi, UpdateSuporteTi } from "../Classes/SuporteTi.class";
 import iconMusica from "../../../img/icon/iconMusica.png";
-import { diaDaSemana } from "../../../Constant/Constantes";
 
-export default class ListaAndamentoMaster extends Component {
+
+
+export default class ListaMusicaMaster extends Component {
+
   state = {
-    andamento: [],
+    pendentes: [],
+    tamanhoPendente: Cookies.get("tamanhoPendente")
+      ? Cookies.get("tamanhoPendente")
+      : Cookies.set("tamanhoPendente", 0),
     modalIsOpen: false,
     itemSelecionado: {},
     foto: "",
+    time: 0,
     file: {
 
     }
@@ -34,10 +40,10 @@ export default class ListaAndamentoMaster extends Component {
   };
 
   render() {
-    this.requests.RequestChamadasAndamentoMaster(this)
+    this.requests.RequestChamadasMusicasMaster(this);
     return (
-      <section className="flex flex-col w-full h-full ">
-        <section className="flex w-full bg-stone-200 h-1/4 shadow-md rounded-t-3xl">
+      <section className="flex flex-col w-full h-full">
+        <section className="flex w-full bg-stone-200 h-44 shadow-md rounded-t-3xl">
           <section className="flex items-center justify-evenly w-full">
             <section className="flex items-center gap-4">
               <section className="flex flex-col justify-center items-center">
@@ -84,7 +90,7 @@ export default class ListaAndamentoMaster extends Component {
                 <span>FINALIZADOS</span>
               </section>
             </section>
-            {diaDaSemana === "Fri" ? <section className="flex items-center gap-4">
+            <section className="flex items-center gap-4">
               <section className="flex flex-col justify-center items-center">
                 <img
                   className="w-12 h-12"
@@ -98,7 +104,7 @@ export default class ListaAndamentoMaster extends Component {
                 </span>
                 <span>MUSICAS</span>
               </section>
-            </section>: ""}
+            </section>
           </section>
         </section>
         <ReactModal
@@ -146,23 +152,23 @@ export default class ListaAndamentoMaster extends Component {
             <section className="flex justify-center items-center gap-5">
               <button
                 onClick={() => {
-                  this.updates.enviarParaPendente(this.state.itemSelecionado);
+                  this.updates.enviarParaAndamento(this.state.itemSelecionado);
                   this.setState({ modalIsOpen: false });
                 }}
-                className="bg-stone-100 transition-colors border px-5 h-14 rounded-md cursor-pointer hover:bg-blue-950 hover:text-white flex justify-center items-center gap-2 font-semibold"
+                className="group/button bg-stone-100 transition-colors border px-5 h-14 rounded-md cursor-pointer hover:bg-blue-950 hover:text-white flex justify-center items-center gap-2 font-semibold"
               >
-                <img className="w-7" src={iconPendente} alt="pendente" />
-                PENDENTE
+                <img className="w-7 group-hover/button:invert" src={iconAndamento} alt="andamento" />
+                ANDAMENTO
               </button>
               <button
                 onClick={() => {
-                  this.updates.enviarParaFechado(this.state.itemSelecionado, this, "andamento");
+                  this.updates.enviarParaFechado(this.state.itemSelecionado, this, "pendente");
                   this.setState({ modalIsOpen: false });
                 }}
-                className="bg-stone-100 transition-colors border px-5 h-14 rounded-md cursor-pointer hover:bg-blue-950 hover:text-white flex justify-center items-center gap-2 font-semibold group-hover/button"
+                className="group/button bg-stone-100 transition-colors border px-5 h-14 rounded-md cursor-pointer hover:bg-blue-950 hover:text-white flex justify-center items-center gap-2 font-semibold"
               >
-                <img className="w-7 group-hover/button:invert" src={iconFinalizado} alt="finalizado" />
-                FINALIZADO
+                <img className="w-7 group-hover/button:invert" src={iconFinalizado} alt="Finalizado" />
+                FINALIZADOS
               </button>
               <a
                 className={`bg-stone-100 transition-colors border p-2 h-10 rounded-md cursor-pointer hover:bg-stone-200 hover:text-white flex justify-center items-center gap-2 font-semibold ${this.state.itemSelecionado.enderecoArquivo === null ? "!hidden" : ""} group/button`}
@@ -175,13 +181,12 @@ export default class ListaAndamentoMaster extends Component {
         <section className="h-3/4 flex flex-col rounded-b-3xl ">
           <section className="flex w-full bg-white sticky top-0 justify-between px-7 font-bold text-lg shadow-md shadow-slate-200">
             <span className="c-pedido ">Pedido</span>
-            <span className="c-responsavel text-center ">Responsavel</span>
             <span className="c-setor text-center ">Setor</span>
             <span className="c-datahora text-center ">Data / Hora</span>
             <span className="c-status text-center ">Status</span>
           </section>
           <section className="h-full w-full overflow-auto">
-            {this.state.andamento.map((item, index) => {
+            {this.state.pendentes.map((item, index) => {
               return (
                 <section key={item.id} className="h-20 items-center border-b-2 px-7 flex justify-between hover:bg-slate-100 cursor-pointer">
                   <section
@@ -200,14 +205,6 @@ export default class ListaAndamentoMaster extends Component {
                     onClick={() => {
                       this.stateModalIsOpen(item);
                     }}
-                    className="c-responsavel text-xs text-center flex h-full justify-center items-center"
-                  >
-                    {item.responsavel}
-                  </span>
-                  <span
-                    onClick={() => {
-                      this.stateModalIsOpen(item);
-                    }}
                     className="c-setor text-xs text-center flex h-full justify-center items-center"
                   >
                     {item.setor}
@@ -221,22 +218,14 @@ export default class ListaAndamentoMaster extends Component {
                     {item.dataHora}
                   </span>
                   <section className="flex justify-center gap-3 c-status h-full items-center">
-                    <img
+                    <span
                       onClick={() => {
-                        this.updates.enviarParaPendente(item);
+                        this.updates.enviarParaInativo(item);
                       }}
                       className="w-5 cursor-pointer"
-                      src={iconPendente}
-                      alt="pendente"
-                    />
-                    <img
-                      onClick={() => {
-                        this.updates.enviarParaFechado(item, this, "andamento");
-                      }}
-                      className="w-5 cursor-pointer"
-                      src={iconFinalizado}
-                      alt="Finalizado"
-                    />
+                    >
+                      	&#10006;
+                    </span>
                   </section>
                 </section>
               );

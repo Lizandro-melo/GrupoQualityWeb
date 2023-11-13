@@ -12,6 +12,17 @@ export const ticket = (obj) => {
     }
     return ticket;
 };
+export const ticketMusica = (obj) => {
+    const funcionario = JSON.parse(Cookies.get("user"));
+    const ticket = {
+        nome: "Pedido de Música",
+        setor: funcionario.setor,
+        dataHora: `${data} - ${hora}`,
+        os: obj.state.pedido,
+        status: "MUSICA",
+    }
+    return ticket;
+};
 
 export const requestFile = (obj, role) => {
     const funcionario = JSON.parse(Cookies.get("user"));

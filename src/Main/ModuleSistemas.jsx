@@ -37,7 +37,8 @@ export default class ModuleSistemas extends Component {
           href = "/chamadas";
           break;
         case 1:
-          if (funcionario.master === true || funcionario.cadastro === true) {
+          return
+          if ((funcionario.rolePrimary === "RH" || funcionario.rolePrimary === "MASTER") && (funcionario.roleSecondary === "COMUM" || funcionario.roleSecondary === "MASTER")) {
             href = "/colaboradores";
           } else {
             return;
@@ -51,12 +52,8 @@ export default class ModuleSistemas extends Component {
         case 3:
           return;
         case 4:
-          if (funcionario.master === true || funcionario.sac === true) {
-            return
-          } else {
-            return;
-          }
-          break
+          
+          return
         case 5:
           return;
         default:

@@ -4,13 +4,25 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300&family=Sarabun:wght@700&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Heebo&display=swap');
+
+* {
+  transition-property: all !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-duration: 200ms !important;
+}
+
 .h-tabela {
   height: 700px;
   width: 98%;
 }
 
 .kanit {
-  font-family: 'Kanit', sans-serif;
+  font-family: 'Kanit', sans-serif !important;
+}
+
+.heebo {
+  font-family: 'Heebo', sans-serif;
 }
 
 /* 
@@ -53,5 +65,15 @@ Certas classes definidas para coisas especificas
 
 .coluna-nav {
   width: 68px;
-  background: linear-gradient( #1E2D5E 0%, #172554 48%, white 100%);
+  background: linear-gradient(#1E2D5E 0%, #172554 48%, white 100%);
 }
+
+.h-5\/6-anotacao {
+  height: 90%;
+}
+
+.max-h-96 {
+  max-height: 550px;
+}
+
+.teste {}

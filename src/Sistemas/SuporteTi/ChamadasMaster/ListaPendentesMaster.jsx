@@ -8,6 +8,8 @@ import iconFinalizado from "../../../img/icon/check256x.png";
 import iconAnexo from "../../../img/icon/anexo.png";
 import iconDownload from "../../../img/icon/icon_download.png";
 import { RequestsSuporteTi, UpdateSuporteTi } from "../Classes/SuporteTi.class";
+import iconMusica from "../../../img/icon/iconMusica.png";
+import { diaDaSemana } from "../../../Constant/Constantes";
 
 
 export default class ListaPendentesMaster extends Component {
@@ -88,6 +90,21 @@ export default class ListaPendentesMaster extends Component {
                 <span>FINALIZADOS</span>
               </section>
             </section>
+            {diaDaSemana === "Fri" ? <section className="flex items-center gap-4">
+              <section className="flex flex-col justify-center items-center">
+                <img
+                  className="w-12 h-12"
+                  src={iconMusica}
+                  alt="icon de ticket"
+                />
+              </section>
+              <section className="flex flex-col">
+                <span className="text-4xl font-bold">
+                  {Cookies.get("tamanhoMusica")}
+                </span>
+                <span>MUSICAS</span>
+              </section>
+            </section>: ""}
           </section>
         </section>
         <ReactModal
@@ -155,7 +172,7 @@ export default class ListaPendentesMaster extends Component {
               </button>
               <a
                 className={`bg-stone-100 transition-colors border p-2 h-10 rounded-md cursor-pointer hover:bg-stone-200 hover:text-white flex justify-center items-center gap-2 font-semibold ${this.state.itemSelecionado.enderecoArquivo === null ? "!hidden" : ""} group/button`}
-                href={`https://localhost:8081/chamadas/download/file?id=${this.state.itemSelecionado.id}`} target="_blank">
+                href={`https://qualityserver12:8081/chamadas/download/file?id=${this.state.itemSelecionado.id}`} target="_blank">
                 <img src={iconDownload} className="w-5" alt="" />
               </a>
             </section>
