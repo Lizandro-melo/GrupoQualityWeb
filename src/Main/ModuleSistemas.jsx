@@ -37,7 +37,6 @@ export default class ModuleSistemas extends Component {
           href = "/chamadas";
           break;
         case 1:
-          return
           if ((funcionario.rolePrimary === "RH" || funcionario.rolePrimary === "MASTER") && (funcionario.roleSecondary === "COMUM" || funcionario.roleSecondary === "MASTER")) {
             href = "/colaboradores";
           } else {

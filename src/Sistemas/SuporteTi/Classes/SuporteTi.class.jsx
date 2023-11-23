@@ -7,7 +7,7 @@ export class RequestsSuporteTi {
 
   AbrirChamada = async (e, obj) => {
     e.preventDefault();
-    const url = `https://qualityserver12:8081/chamadas/pedido`;
+    const url = `https://localhost:8081/chamadas/pedido`;
     axios.post(url, ticket(obj)).then((response) => {
       obj.setState({
         mensagem: response.data,
@@ -25,7 +25,7 @@ export class RequestsSuporteTi {
           break;
       }
     })
-    await axios.post("https://qualityserver12:8081/chamadas/update/file", requestFile(obj, "padrao"), {
+    await axios.post("https://localhost:8081/chamadas/update/file", requestFile(obj, "padrao"), {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -36,7 +36,7 @@ export class RequestsSuporteTi {
   }
 
   RequestChamadasAbertasMaster = (obj) => {
-    axios.post("https://qualityserver12:8081/chamadas/abertas", {
+    axios.post("https://localhost:8081/chamadas/abertas", {
       headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Content-Type': 'application/json'
@@ -62,14 +62,14 @@ export class RequestsSuporteTi {
   }
 
   RequestChamadasMusicasMaster = (obj) => {
-    axios.post("https://qualityserver12:8081/chamadas/getmusica", {
+    axios.post("https://localhost:8081/chamadas/getmusica", {
       headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Content-Type': 'application/json'
       },
     }).then((response) => {
       const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
-      const dezPrimeiros = dadosOrdenados.slice(0, 10);
+      const dezPrimeiros = dadosOrdenados.slice(0, 50);
       const tamanhoNovo = dezPrimeiros.length;
       if (tamanhoNovo > Cookies.get("tamanhoMusica")) {
         obj.setState({ pendentes: dezPrimeiros });
@@ -88,7 +88,7 @@ export class RequestsSuporteTi {
 
   RequestChamadasFechadasMaster = (obj) => {
     axios
-      .post("https://qualityserver12:8081/chamadas/fechadas", hoje, {
+      .post("https://localhost:8081/chamadas/fechadas", hoje, {
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Content-Type': 'application/json'
@@ -97,7 +97,7 @@ export class RequestsSuporteTi {
       .then((response) => {
         const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
         axios
-          .post("https://qualityserver12:8081/chamadas/fechadas", ontem)
+          .post("https://localhost:8081/chamadas/fechadas", ontem)
           .then((response) => {
             const dadosOrdenadosOntem = response.data.sort((a, b) => b.id - a.id);
             dadosOrdenadosOntem.map((p) => {
@@ -114,7 +114,7 @@ export class RequestsSuporteTi {
 
   RequestChamadasAndamentoMaster = (obj) => {
     axios
-      .post("https://qualityserver12:8081/chamadas/andamento", {
+      .post("https://localhost:8081/chamadas/andamento", {
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Content-Type': 'application/json'
@@ -139,7 +139,7 @@ export class RequestsSuporteTi {
   RequestChamadasAbertasComum = (obj) => {
     const funcionario = JSON.parse(Cookies.get("user"));
     axios
-      .post("https://qualityserver12:8081/chamadas/abertas/nome", {
+      .post("https://localhost:8081/chamadas/abertas/nome", {
         nome: `${funcionario.nome} ${funcionario.sobrenome}`,
       }, {
         headers: {
@@ -168,7 +168,7 @@ export class RequestsSuporteTi {
   RequestChamadasAndamentoComum = (obj) => {
     const funcionario = JSON.parse(Cookies.get("user"));
     axios
-      .post("https://qualityserver12:8081/chamadas/andamento/nome", {
+      .post("https://localhost:8081/chamadas/andamento/nome", {
         nome: `${funcionario.nome} ${funcionario.sobrenome}`,
       }, {
         headers: {
@@ -207,11 +207,11 @@ export class RequestsSuporteTi {
       nome: `${funcionario.nome} ${funcionario.sobrenome}`,
     }
     axios
-      .post("https://qualityserver12:8081/chamadas/fechadas/nome", hoje)
+      .post("https://localhost:8081/chamadas/fechadas/nome", hoje)
       .then((response) => {
         const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
         axios
-          .post("https://qualityserver12:8081/chamadas/fechadas/nome", ontem, {
+          .post("https://localhost:8081/chamadas/fechadas/nome", ontem, {
             headers: {
               'Cache-Control': 'no-cache, no-store, must-revalidate',
               'Content-Type': 'application/json'
@@ -259,7 +259,7 @@ export class UpdateSuporteTi {
 
   enviarParaFechado = async (item, obj, role) => {
     const funcionario = JSON.parse(Cookies.get("user"));
-    await axios.post("https://qualityserver12:8081/chamadas/update/file", requestFile(obj, role), {
+    await axios.post("https://localhost:8081/chamadas/update/file", requestFile(obj, role), {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -272,7 +272,7 @@ export class UpdateSuporteTi {
       status: "FECHADO",
       responsavel: `${funcionario.nome} ${funcionario.sobrenome}`
     };
-    const url = "https://qualityserver12:8081/chamadas/atualizar/responsavel";
+    const url = "https://localhost:8081/chamadas/atualizar/responsavel";
     axios.put(url, dados);
   };
 
@@ -283,7 +283,7 @@ export class UpdateSuporteTi {
       status: "ANDAMENTO",
       responsavel: `${funcionario.nome} ${funcionario.sobrenome}`
     };
-    const url = "https://qualityserver12:8081/chamadas/atualizar/responsavel";
+    const url = "https://localhost:8081/chamadas/atualizar/responsavel";
     axios.put(url, dados);
   };
 
@@ -293,7 +293,7 @@ export class UpdateSuporteTi {
       id: item.id,
       status: "INATIVO",
     };
-    const url = "https://qualityserver12:8081/chamadas/apagar";
+    const url = "https://localhost:8081/chamadas/apagar";
     axios.put(url, dados);
   };
 
@@ -302,7 +302,7 @@ export class UpdateSuporteTi {
       id: item.id,
       status: "ABERTO",
     };
-    const url = "https://qualityserver12:8081/chamadas/atualizar";
+    const url = "https://localhost:8081/chamadas/atualizar";
     axios.put(url, dados);
   };
 

@@ -153,7 +153,7 @@ export default class ListaFinalizadosMaster extends Component {
               </button>
               <a
                 className={`bg-stone-100 transition-colors border p-2 h-10 rounded-md cursor-pointer hover:bg-stone-200 hover:text-white flex justify-center items-center gap-2 font-semibold ${this.state.itemSelecionado.enderecoArquivo === null ? "!hidden" : ""} group/button`}
-                href={`https://qualityserver12:8081/chamadas/download/file/finalizado?id=${this.state.itemSelecionado.id}`} target="_blank">
+                href={`https://localhost:8081/chamadas/download/file/finalizado?id=${this.state.itemSelecionado.id}`} target="_blank">
                 <img src={iconDownload} className="w-5" alt="" />
               </a>
             </section>

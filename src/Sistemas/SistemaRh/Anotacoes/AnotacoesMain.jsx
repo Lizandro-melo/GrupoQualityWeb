@@ -42,7 +42,7 @@ export default class AnotacoesMain extends Component {
         filtroColaborador: Cookies.get("filtroRhColaborador"),
         foto: "",
         dataFinal: dataFinalDefault,
-        dataInicial: dataInicialDefault,
+        dataInicial: localStorage.getItem("dataInicio") !== null ? localStorage.getItem("dataInicio") : dataInicialDefault,
         modalIsOpenCriarAnotacao: false,
         modalIsOpenEditarAnotacao: false,
         modalIsOpenMensagem: false,
@@ -193,6 +193,7 @@ export default class AnotacoesMain extends Component {
                             <span className="font-semibold">Contratado(a): {this.state.colaborador.dataAdmissao}</span>
                             {this.state.colaborador.tipo === "DESLIGADO" ? <span className="font-semibold">Desligado: {this.state.colaborador.dataDemissao}</span> : null}
                             <span className="font-semibold">Tipo: {this.state.colaborador.tipo}</span>
+                            <span className="font-semibold">Data de Nascimento: {this.state.colaborador.dataNascimento}</span>
                         </section>
                     </section>
                     <section className="flex relative">
@@ -307,6 +308,7 @@ export default class AnotacoesMain extends Component {
                                             this.setState({
                                                 dataInicial: e.target.value
                                             })
+                                            localStorage.setItem("dataInicio", e.target.value)
                                         }
                                         }
                                         className="border border-stone-300 px-2 w-80 max-lg:w-52 bg-white h-8 text-sm"
@@ -338,15 +340,11 @@ export default class AnotacoesMain extends Component {
                                         }
                                         }
                                     >
-                                        {this.state.filtroColaborador === "CONTRATADOS" ?
-                                            <option value="CONTRATADO">Contratados</option>
+                                        <option value={this.state.colaborador.tipo}>{this.state.colaborador.tipo === "CONTRATADO" ? "Contratado" : "Estagiario"}</option>
+                                        {this.state.colaborador.tipo === "CONTRATADO" ?
+                                            <option value="ESTAGIARIO">Estagiario</option>
                                             :
-                                            <option value="ESTAGIARIO">Estagiarios</option>
-                                        }
-                                        {this.state.filtroColaborador === "CONTRATADOS" ?
-                                            <option value="ESTAGIARIO">Estagiarios</option>
-                                            :
-                                            <option value="CONTRATADO">Contratados</option>
+                                            <option value="CONTRATADO">Contratado</option>
                                         }
                                         {this.state.user.rolePrimary === "MASTER" ?
                                             <option value="TODOS">Todos</option> :

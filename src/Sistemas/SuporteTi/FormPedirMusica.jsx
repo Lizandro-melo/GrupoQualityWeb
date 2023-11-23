@@ -22,7 +22,7 @@ export default class FormPedirMusica extends Component {
 
   PedirMusica = async (e) => {
     e.preventDefault();
-    const url = `https://qualityserver12:8081/chamadas/pedido`;
+    const url = `https://localhost:8081/chamadas/pedido`;
     axios.post(url, ticketMusica(this)).then((response) => {
       this.setState({
         mensagem: response.data,

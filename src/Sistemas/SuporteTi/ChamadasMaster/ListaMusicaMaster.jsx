@@ -138,44 +138,6 @@ export default class ListaMusicaMaster extends Component {
                 {this.state.itemSelecionado.os}
               </p>
             </section>
-            <section className="flex items-baseline gap-5 justify-center">
-              <input className="mb-5 file:mr-4 file:py-2 file:px-4
-      file:rounded-full file:border-0
-      file:text-sm file:font-semibold
-      file:bg-stone-100 file:text-blue-950
-      hover:file:bg-stone-200 text-xs" type="file" onChange={(e) => {
-                  this.setState({
-                    file: e.target.files[0]
-                  })
-                }} />
-            </section>
-            <section className="flex justify-center items-center gap-5">
-              <button
-                onClick={() => {
-                  this.updates.enviarParaAndamento(this.state.itemSelecionado);
-                  this.setState({ modalIsOpen: false });
-                }}
-                className="group/button bg-stone-100 transition-colors border px-5 h-14 rounded-md cursor-pointer hover:bg-blue-950 hover:text-white flex justify-center items-center gap-2 font-semibold"
-              >
-                <img className="w-7 group-hover/button:invert" src={iconAndamento} alt="andamento" />
-                ANDAMENTO
-              </button>
-              <button
-                onClick={() => {
-                  this.updates.enviarParaFechado(this.state.itemSelecionado, this, "pendente");
-                  this.setState({ modalIsOpen: false });
-                }}
-                className="group/button bg-stone-100 transition-colors border px-5 h-14 rounded-md cursor-pointer hover:bg-blue-950 hover:text-white flex justify-center items-center gap-2 font-semibold"
-              >
-                <img className="w-7 group-hover/button:invert" src={iconFinalizado} alt="Finalizado" />
-                FINALIZADOS
-              </button>
-              <a
-                className={`bg-stone-100 transition-colors border p-2 h-10 rounded-md cursor-pointer hover:bg-stone-200 hover:text-white flex justify-center items-center gap-2 font-semibold ${this.state.itemSelecionado.enderecoArquivo === null ? "!hidden" : ""} group/button`}
-                href={`https://qualityserver12:8081/chamadas/download/file?id=${this.state.itemSelecionado.id}`} target="_blank">
-                <img src={iconDownload} className="w-5" alt="" />
-              </a>
-            </section>
           </section>
         </ReactModal>
         <section className="h-3/4 flex flex-col rounded-b-3xl ">

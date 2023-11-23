@@ -1,5 +1,5 @@
 import axios from "axios"
-import { dataFinalDefault, dataInicialDefault, dataHoje, formatarData } from "../Constant/AnotacoesConstant";
+import { dataFinalDefault, dataInicialDefault, dataHoje, formatarData, formatarDataInput } from "../Constant/AnotacoesConstant";
 import Cookies from "js-cookie";
 import $ from "jquery";
 
@@ -10,7 +10,7 @@ export class RequisicaoAnotacao {
 
         switch (Cookies.get("filtroRhColaborador")) {
             case "ESTAGIARIOS":
-                axios.post("https://qualityserver12:8081/rh/colaboradores/estagiarios/ativos").then(response => {
+                axios.post("https://localhost:8081/rh/colaboradores/estagiarios/ativos").then(response => {
                     const colaboradores = response.data
                     const ordenAlfabetica = colaboradores.sort((a, b) => a.nome.localeCompare(b.nome));
                     obj.setState({
@@ -27,7 +27,7 @@ export class RequisicaoAnotacao {
                 break
 
             case "DESLIGADOS":
-                axios.post("https://qualityserver12:8081/rh/colaboradores/contratados/desligados").then(response => {
+                axios.post("https://localhost:8081/rh/colaboradores/contratados/desligados").then(response => {
                     const colaboradores = response.data
                     const ordenAlfabetica = colaboradores.sort((a, b) => a.nome.localeCompare(b.nome));
                     obj.setState({
@@ -44,7 +44,7 @@ export class RequisicaoAnotacao {
                 break
 
             case "CONTRATADOS":
-                axios.post("https://qualityserver12:8081/rh/colaboradores/contratados/ativos").then(response => {
+                axios.post("https://localhost:8081/rh/colaboradores/contratados/ativos").then(response => {
                     const colaboradores = response.data
                     const ordenAlfabetica = colaboradores.sort((a, b) => a.nome.localeCompare(b.nome));
                     obj.setState({
@@ -64,10 +64,11 @@ export class RequisicaoAnotacao {
     }
 
     getColaboradorDados(obj, idColaborador) {
-        axios.post(`https://qualityserver12:8081/rh/colaboradores/id?id=${idColaborador}`).then(response => {
+        axios.post(`https://localhost:8081/rh/colaboradores/id?id=${idColaborador}`).then(response => {
             const colaborador = response.data;
             let dataAdmissao = colaborador.dataAdmissao;
             let dataDemissao = colaborador.dataDemissao
+            let dataNascimento = colaborador.dataNascimento
             let setor = colaborador.setor === null ? "Não registrado" : colaborador.setor.nome;
 
             switch (dataAdmissao) {
@@ -95,6 +96,16 @@ export class RequisicaoAnotacao {
                     break;
             }
 
+            switch (dataNascimento) {
+                case null:
+                    dataNascimento = "Não registrado"
+                    break;
+
+                default:
+                    dataNascimento = formatarData(colaborador.dataNascimento)
+                    break;
+            }
+
             const colaboradorResponse = {
                 idColaborador: colaborador.idColaborador,
                 nome: colaborador.nome,
@@ -104,7 +115,8 @@ export class RequisicaoAnotacao {
                 setor: setor,
                 empresa: colaborador.empresa.nome,
                 tipo: colaborador.tipo,
-                foto: `foto-funcionarios/${colaborador.nome}.png`
+                foto: `foto-funcionarios/${colaborador.nome}.png`,
+                dataNascimento: dataNascimento
             }
 
             localStorage.setItem("colaborador", JSON.stringify(colaboradorResponse))
@@ -127,7 +139,7 @@ export class RequisicaoAnotacao {
 
     getAnotacao(obj, idColaborador, dataIncio, dataFinal, tipoColaborador) {
         if (tipoColaborador === "TODOS") {
-            axios.post(`https://qualityserver12:8081/rh/anotacao/all?id=${idColaborador}&inicio=${dataIncio}&fim=${dataFinal}`).then(response => {
+            axios.post(`https://localhost:8081/rh/anotacao/all?id=${idColaborador}&inicio=${dataIncio}&fim=${dataFinal}`).then(response => {
                 if (response.data === []) {
                     obj.setState({
                         anotacoesList: [],
@@ -155,7 +167,7 @@ export class RequisicaoAnotacao {
             })
         } else {
 
-            axios.post(`https://qualityserver12:8081/rh/anotacao/id?id=${idColaborador}&inicio=${dataIncio}&fim=${dataFinal}&tipo=${tipoColaborador}`).then(response => {
+            axios.post(`https://localhost:8081/rh/anotacao/id?id=${idColaborador}&inicio=${dataIncio}&fim=${dataFinal}&tipo=${tipoColaborador}`).then(response => {
                 if (response.data === []) {
                     obj.setState({
                         anotacoesList: [],
@@ -231,7 +243,7 @@ export class RequisicaoAnotacao {
             motivo: form.motivo,
             atraso: form.atrasoCheckbox
         }
-        axios.put(`https://qualityserver12:8081/rh/anotacao/add?inicio=${form.dataInicialModalAnotacao}&fim=${form.dataFinalModalAnotacao}`, anotação)
+        axios.put(`https://localhost:8081/rh/anotacao/add?inicio=${form.dataInicialModalAnotacao}&fim=${form.dataFinalModalAnotacao}`, anotação)
     }
     EditarAnotacao = (obj) => {
         const form = obj.state
@@ -259,7 +271,7 @@ export class RequisicaoAnotacao {
             atraso: form.atrasoCheckbox
         }
 
-        axios.put("https://qualityserver12:8081/rh/anotacao/edit", anotação)
+        axios.put("https://localhost:8081/rh/anotacao/edit", anotação)
     }
     desabilitarAnotacao(obj) {
         if (obj.state.responsavel.roleSecondary === "MASTER") {
@@ -268,7 +280,7 @@ export class RequisicaoAnotacao {
                 idAnotacao: form.idAnotacao,
             }
 
-            axios.put("https://qualityserver12:8081/rh/anotacao/delete", anotação)
+            axios.put("https://localhost:8081/rh/anotacao/delete", anotação)
             window.location.reload()
         } else {
 
@@ -281,7 +293,7 @@ export class RequisicaoAnotacao {
                 idAnotacao: form.idAnotacao,
             }
 
-            axios.put("https://qualityserver12:8081/rh/anotacao/active", anotação)
+            axios.put("https://localhost:8081/rh/anotacao/active", anotação)
             window.location.reload()
         } else {
 
