@@ -5,6 +5,8 @@ import { Component } from "react";
 import Cookies from "js-cookie";
 import FormLogin from "./Login/FormLogin";
 import SistemaRhModule from "./Sistemas/SistemaRh/SistemaRhModule";
+import Relatorio from "./Sistemas/SistemaRh/RelatiorioIndividual";
+import RelatorioAll from "./Sistemas/SistemaRh/RelatiorioTodos";
 
 export default class ModuleRoutes extends Component {
   state = {
@@ -32,6 +34,14 @@ export default class ModuleRoutes extends Component {
           <Route
             element={this.state.token ? <ModuleSuporteTi /> : <Navigate to="/" />}
             path="/chamadas"
+          />
+          <Route
+            element={this.state.token ? <Relatorio /> : <Navigate to="/" />}
+            path="/relatorio/individual"
+          />
+          <Route
+            element={this.state.token ? <RelatorioAll /> : <Navigate to="/" />}
+            path="/relatorio/all"
           />
         </Routes>
       </BrowserRouter>
