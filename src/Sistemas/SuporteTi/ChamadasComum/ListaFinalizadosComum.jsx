@@ -108,7 +108,7 @@ export default class ListaFinalizadosComum extends Component {
             <section className="flex justify-center gap-5 mb-10">
             <a
                 className={`bg-stone-100 transition-colors border w-36 h-14 rounded-md cursor-pointer hover:bg-blue-950 hover:text-white flex justify-center items-center gap-2 font-semibold ${this.state.itemSelecionado.enderecoArquivo === null ? "!hidden" : ""}`}
-                href={`https://localhost:8081/chamadas/download/file/finalizado?id=${this.state.itemSelecionado.id}`} target="_blank">
+                href={`https://qualityserver12:8081/chamadas/download/file/finalizado?id=${this.state.itemSelecionado.id}`} target="_blank">
                 Baixar Arquivo
               </a>
             </section>

@@ -56,7 +56,7 @@ export default class RelatorioAll extends Component {
               <section className="flex gap-4 flex-col justify-center items-center">
                 <section className="flex justify-center items-center gap-1 flex-col">
                   <h2 className="text-xl font-bold">{user.nomeCompleto}</h2>
-                  <span>Admitido(a): {user.dataAdmissao}</span>
+                  <span>Admitido(a): {formatarData(user.dataAdmissao)}</span>
                 </section>
                 <section>
                   <span>

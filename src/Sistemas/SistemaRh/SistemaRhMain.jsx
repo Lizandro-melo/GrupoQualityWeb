@@ -7,7 +7,6 @@ import AnotacoesMain from "./Anotacoes/AnotacoesMain";
 import CadastrarSistemaRh from "./Cadastrar/CadastrarSistemaRh";
 import AtualizarSistemaRh from "./Atualizar/AtualizarSistemaRh";
 import RelatoriosMain from "./Relatorio/RelatoriosMain";
-import Cookies from "js-cookie";
 
 export default class SistemaRhMain extends Component {
   state = {

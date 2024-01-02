@@ -7,7 +7,7 @@ export class RelatoriosController {
 
   getAllColabordoresNome(obj) {
     axios
-      .post("https://localhost:8081/rh/colaboradores/contratados/ativos")
+      .post("https://qualityserver12:8081/rh/colaboradores/contratados/ativos")
       .then((response) => {
         const colaboradores = response.data;
         const ordenAlfabetica = colaboradores.sort((a, b) =>
@@ -53,14 +53,18 @@ export class RelatoriosController {
     obj.state.colaboradoresList.map((colaborador) => {
       axios
         .get(
-          `https://localhost:8081/rh/colaborador/soma?id=${colaborador.idColaborador}&inicio=${dataIncial}&fim=${dataFinal}`
+          `https://qualityserver12:8081/rh/colaborador/soma?id=${
+            colaborador.idColaborador
+          }&inicio=${localStorage.getItem(
+            "dataInicio"
+          )}&fim=${localStorage.getItem("dataFinal")}`
         )
         .then((response) => {
           let cal = response.data;
           colaboradorReg.nomeCompleto = colaborador.nomeCompleto;
           colaboradorReg.dataAdmissao = colaborador.dataAdmissao;
-          colaboradorReg.dataInicial = dataIncial;
-          colaboradorReg.dataFinal = dataFinal;
+          colaboradorReg.dataInicial = localStorage.getItem("dataInicio");
+          colaboradorReg.dataFinal = localStorage.getItem("dataFinal");
           colaboradorReg.bancoHoras = cal.bancoHoras;
           colaboradorReg.bancoNegativo = cal.bancoNegativo;
           colaboradorReg.bancoPositivo = cal.bancoPositivo;
@@ -83,7 +87,7 @@ export class RelatoriosController {
 
   getColaboradorDados(obj, idColaborador) {
     axios
-      .post(`https://localhost:8081/rh/colaboradores/id?id=${idColaborador}`)
+      .post(`https://qualityserver12:8081/rh/colaboradores/id?id=${idColaborador}`)
       .then((response) => {
         const colaborador = response.data;
         let dataAdmissao = colaborador.dataAdmissao;
@@ -147,44 +151,18 @@ export class RelatoriosController {
           JSON.stringify(colaboradorResponse)
         );
         obj.setState({
-          colaborador: JSON.parse(localStorage.getItem("colaborador")),
+          colaborador: colaboradorResponse,
         });
 
         this.getAnotacao(
-          obj,
-          colaboradorResponse.idColaborador,
+          idColaborador,
           obj.state.dataInicial,
-          obj.state.dataFinal,
-          colaboradorResponse.tipo
+          obj.state.dataFinal
         );
-
-        const dadosRelatorio = {
-          nomeCompleto: "",
-          dataInicial: "",
-          dataFinal: "",
-          bancoHoras: 0,
-          bancoPositivo: 0,
-          bancoNegativo: 0,
-          dataAdmissao: "",
-        };
-        setTimeout(() => {
-          dadosRelatorio.nomeCompleto = colaboradorResponse.nomeCompleto;
-          dadosRelatorio.dataInicial = obj.state.dataInicial;
-          dadosRelatorio.dataFinal = obj.state.dataFinal;
-          dadosRelatorio.bancoHoras = obj.state.bancoHoras;
-          dadosRelatorio.bancoPositivo = obj.state.bancoPositivo;
-          dadosRelatorio.bancoNegativo = obj.state.bancoNegativo;
-          dadosRelatorio.dataAdmissao = colaboradorResponse.dataAdmissao;
-
-          localStorage.setItem(
-            "relatorioIdividual",
-            JSON.stringify(dadosRelatorio)
-          );
-        }, 500);
+        this.getDadosIndividual(obj);
       })
       .catch(() => {
         console.log("Error colaborador null");
-        localStorage.setItem("colaborador", null);
         obj.setState({
           colaborador: "",
         });
@@ -193,14 +171,6 @@ export class RelatoriosController {
   }
 
   getDadosIndividual(obj) {
-   
-    obj.setState({
-      colaborador: {
-        nomeCompleto: "Todos os Colaboradores",
-        foto: `foto-funcionarios/todos.png`,
-      },
-    });
-
     let list = [];
     let colaboradorReg = {
       nomeCompleto: "",
@@ -211,18 +181,22 @@ export class RelatoriosController {
       bancoNegativo: 0,
       bancoPositivo: 0,
     };
-    const colaborador = obj.state.colaborador;
+    const colaborador = JSON.parse(localStorage.getItem("colaborador"));
 
     axios
       .get(
-        `https://localhost:8081/rh/colaborador/soma?id=${colaborador.idColaborador}&inicio=${obj.state.dataInicial}&fim=${obj.state.dataFinal}`
+        `https://qualityserver12:8081/rh/colaborador/soma?id=${
+          colaborador.idColaborador
+        }&inicio=${localStorage.getItem(
+          "dataInicio"
+        )}&fim=${localStorage.getItem("dataFinal")}`
       )
       .then((response) => {
         let cal = response.data;
         colaboradorReg.nomeCompleto = colaborador.nomeCompleto;
         colaboradorReg.dataAdmissao = colaborador.dataAdmissao;
-        colaboradorReg.dataInicial = obj.state.dataInicial;
-        colaboradorReg.dataFinal = obj.state.dataFinal;
+        colaboradorReg.dataInicial = localStorage.getItem("dataInicio");
+        colaboradorReg.dataFinal = localStorage.getItem("dataFinal");
         colaboradorReg.bancoHoras = cal.bancoHoras;
         colaboradorReg.bancoNegativo = cal.bancoNegativo;
         colaboradorReg.bancoPositivo = cal.bancoPositivo;
@@ -239,39 +213,29 @@ export class RelatoriosController {
       });
 
     setTimeout(() => {
-      localStorage.setItem("listAllRelatorio", JSON.stringify(list));
+      localStorage.setItem("relatorioIdividual", JSON.stringify(list[0]));
     }, 400);
   }
-
-  getAnotacao(obj, idColaborador, dataIncio, dataFinal, tipoColaborador) {
+  getAnotacao(idColaborador, dataIncio, dataFinal) {
+    const colaborador = JSON.parse(localStorage.getItem("colaborador"));
     axios
       .post(
-        `https://localhost:8081/rh/anotacao/id?id=${idColaborador}&inicio=${dataIncio}&fim=${dataFinal}&tipo=${tipoColaborador}`
+        `https://qualityserver12:8081/rh/anotacao/id?id=${idColaborador}&inicio=${dataIncio}&fim=${dataFinal}&tipo=${colaborador.tipo}`
       )
       .then((response) => {
-        if (response.data === []) {
-          obj.setState({
-            anotacoesList: [],
-          });
+        if (response.data === null) {
+          localStorage.setItem("anotacoesList", null);
         }
 
-        const listaOrdenada = response.data.sort(
-          (a, b) => b.idAnotacao - a.idAnotacao
-        );
-
-        const anotacoes = listaOrdenada.map((anotacao) => {
+        const anotacoes = response.data.map((anotacao) => {
           let dataFinalFormatada = formatarData(anotacao.dataFinal);
           let dataInicioFormatada = formatarData(anotacao.dataInicio);
           anotacao.dataFinal = dataFinalFormatada;
           anotacao.dataInicio = dataInicioFormatada;
           return anotacao;
         });
-
-        obj.setState({
-          anotacoesList: anotacoes,
-        });
         localStorage.setItem("anotacoesList", JSON.stringify(anotacoes));
-        this.calcularAnotacoes(obj, anotacoes);
+        this.calcularAnotacoes(anotacoes);
         return;
       })
       .catch((err) => {
@@ -279,18 +243,56 @@ export class RelatoriosController {
       });
   }
 
-  calcularAnotacoes = (obj, anotacoes) => {
+  calcularAnotacoes = (anotacoes) => {
+    let list = {
+      bancoHoras: 0,
+      horaExtra: 0,
+      bancoPositivo: 0,
+      bancoNegativo: 0,
+      faltas: 0,
+      licenca: 0,
+      suspensao: 0,
+      atestadoHora: 0,
+      advsEscritas: 0,
+      advsVerbais: 0,
+      atrasoInt: 0,
+      ferias: 0,
+      atrasoQuan: 0,
+    };
     anotacoes.map((anotacao) => {
       if (anotacao.status === false) {
         return;
       }
-      obj.setState({
-        bancoHoras: (obj.state.bancoHoras +=
+      list = {
+        bancoHoras: (list.bancoHoras +=
           anotacao.bancoPositivo - anotacao.bancoNegativo),
-        horaExtra: (obj.state.horaExtra += anotacao.horaExtra),
-        bancoPositivo: (obj.state.bancoPositivo += anotacao.bancoPositivo),
-        bancoNegativo: (obj.state.bancoNegativo += anotacao.bancoNegativo),
-      });
+        horaExtra: (list.horaExtra += anotacao.horaExtra),
+        bancoPositivo: (list.bancoPositivo += anotacao.bancoPositivo),
+        bancoNegativo: (list.bancoNegativo += anotacao.bancoNegativo),
+
+        faltas: anotacao.faltou === true ? ++list.faltas : (list.faltas += 0),
+        atestadoHora:
+          anotacao.atestadoHora === true
+            ? ++list.atestadoHora
+            : (list.atestadoHora += 0),
+        suspensao:
+          anotacao.suspensao === true
+            ? ++list.suspensao
+            : (list.suspensao += 0),
+        advsEscritas:
+          anotacao.advertenciaEscrita === true
+            ? ++list.advsEscritas
+            : (list.advsEscritas += 0),
+        advsVerbais:
+          anotacao.advertenciaVerbal === true
+            ? ++list.advsVerbais
+            : (list.advsVerbais += 0),
+        atrasoInt: (list.atrasoInt += anotacao.atrasoInt),
+        ferias: anotacao.ferias === true ? ++list.ferias : (list.ferias += 0),
+        atrasoQuan:
+          anotacao.atraso === true ? ++list.atrasoQuan : (list.atrasoQuan += 0),
+      };
     });
+    localStorage.setItem("relatorioGeral", JSON.stringify(list))
   };
 }

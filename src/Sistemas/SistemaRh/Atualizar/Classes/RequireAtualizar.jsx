@@ -11,10 +11,9 @@ import {
 import Cookies from "js-cookie";
 
 export class RequireAtualizar {
-  
   getDadosColaborador(obj, idColaborador) {
     axios
-      .post(`https://localhost:8081/rh/colaboradores/id?id=${idColaborador}`)
+      .post(`https://qualityserver12:8081/rh/colaboradores/id?id=${idColaborador}`)
       .then((element) => {
         const colaborador = element.data;
         this.salvarColaborador(colaborador);
@@ -54,7 +53,7 @@ export class RequireAtualizar {
         });
         axios
           .post(
-            `https://localhost:8081/intranet/colaborador/nome?nome=${colaborador.nome.toLowerCase()}`
+            `https://qualityserver12:8081/intranet/colaborador/nome?nome=${colaborador.nome.toLowerCase()}`
           )
           .then((element) => {
             const colaborador = element.data[0];
@@ -126,7 +125,7 @@ export class RequireAtualizar {
 
     axios
       .put(
-        `https://localhost:8081/rh/contratar/estagiario?id=${colaborador.idColaborador}&data=${dataHoje}`
+        `https://qualityserver12:8081/rh/contratar/estagiario?id=${colaborador.idColaborador}&data=${dataHoje}`
       )
       .then((response) => response.data.nome);
     obj.setState({
@@ -148,7 +147,7 @@ export class RequireAtualizar {
     }
     axios
       .put(
-        `https://localhost:8081/rh/colaborador/desligar?id=${
+        `https://qualityserver12:8081/rh/colaborador/desligar?id=${
           colaborador.idColaborador
         }&data=${dataHoje}&responsavel=${user.nome} ${
           user.sobrenome
@@ -176,7 +175,7 @@ export class RequireAtualizar {
     }
     axios
       .put(
-        `https://localhost:8081/rh/colaborador/reativar?id=${
+        `https://qualityserver12:8081/rh/colaborador/reativar?id=${
           colaborador.idColaborador
         }&responsavel=${user.nome} ${
           user.sobrenome
@@ -190,12 +189,17 @@ export class RequireAtualizar {
   }
 
   async updateColaborador(obj) {
+    const colaborador = JSON.parse(localStorage.getItem("colaborador"));
+    const user = JSON.parse(Cookies.get("user"));
+
     const setor = await axios
-      .get(`https://localhost:8081/rh/setor/id?id=${obj.state.setor}`)
+      .get(`https://qualityserver12:8081/rh/setor/id?id=${obj.state.setor}`)
       .then((response) => response.data.nome);
+
     const empresa = await axios
-      .get(`https://localhost:8081/rh/empresas/id?id=${obj.state.empresa}`)
+      .get(`https://qualityserver12:8081/rh/empresas/id?id=${obj.state.empresa}`)
       .then((response) => response.data.nome);
+
     const colaboradorIntra = {
       login: primeiroUltimoNome(obj.state.nomeCompleto).toLowerCase(),
       senha: obj.state.senha,
@@ -212,20 +216,36 @@ export class RequireAtualizar {
     };
 
     const colaboradorRh = {
-      idColaborador: obj.state.colaborador.idColaborador,
-      tipo: obj.state.tipo,
+      idColaborador: colaborador.idColaborador,
+      tipo: colaborador.tipo,
     };
 
     switch (obj.state.tipo) {
       case "CONTRATADO":
         axios.put(
-          `https://localhost:8081/rh/colaboradores/update/contratado?setor=${obj.state.setor}&empresa=${obj.state.empresa}&dataNascimento=${obj.state.dataNascimento}&dataInicio=${obj.state.dataInicio}&dataDemissao=${obj.state.dataDemissao}`,
+          `https://qualityserver12:8081/rh/colaboradores/update/contratado?setor=${
+            obj.state.setor
+          }&empresa=${obj.state.empresa}&dataNascimento=${
+            obj.state.dataNascimento
+          }&dataInicio=${obj.state.dataInicio}&dataDemissao=${
+            obj.state.dataDemissao
+          }&demissaostring=${formatarData(
+            obj.state.dataDemissao
+          )}&responsavel=${user.nome} ${user.sobrenome}`,
           colaboradorRh
         );
         break;
       case "ESTAGIARIO":
         axios.put(
-          `https://localhost:8081/rh/colaboradores/update/estagiario?setor=${obj.state.setor}&empresa=${obj.state.empresa}&dataNascimento=${obj.state.dataNascimento}&dataInicio=${obj.state.dataInicio}&dataDemissao=${obj.state.dataDemissao}`,
+          `https://qualityserver12:8081/rh/colaboradores/update/estagiario?setor=${
+            obj.state.setor
+          }&empresa=${obj.state.empresa}&dataNascimento=${
+            obj.state.dataNascimento
+          }&dataInicio=${obj.state.dataInicio}&dataDemissao=${
+            obj.state.dataDemissao
+          }&demissaostring=${formatarData(
+            obj.state.dataDemissao
+          )}&responsavel=${user.nome} ${user.sobrenome}`,
           colaboradorRh
         );
         break;
@@ -234,7 +254,7 @@ export class RequireAtualizar {
     }
 
     axios.put(
-      `https://localhost:8081/rh/colaboradores/intranet/update?dataInicio=${formatarData(
+      `https://qualityserver12:8081/rh/colaboradores/intranet/update?dataInicio=${formatarData(
         obj.state.dataInicio
       )}`,
       colaboradorIntra

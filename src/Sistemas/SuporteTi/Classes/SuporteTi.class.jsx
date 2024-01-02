@@ -1,125 +1,145 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ticket, requestFile } from "../Constant/SuporteTiConst";
-import { data, hoje, hora, ontem, dataAnterior } from "../../../Constant/Constantes";
+import {
+  data,
+  hoje,
+  hora,
+  ontem,
+  dataAnterior,
+} from "../../../Constant/Constantes";
 
 export class RequestsSuporteTi {
-
   AbrirChamada = async (e, obj) => {
     e.preventDefault();
-    const url = `https://localhost:8081/chamadas/pedido`;
-    axios.post(url, ticket(obj)).then((response) => {
-      obj.setState({
-        mensagem: response.data,
-        modalMensagemIsOpen: true,
+    const url = `https://qualityserver12:8081/chamadas/pedido`;
+    axios
+      .post(url, ticket(obj))
+      .then((response) => {
+        obj.setState({
+          mensagem: response.data,
+          modalMensagemIsOpen: true,
+        });
+      })
+      .catch((e) => {
+        switch (e.code) {
+          case "ERR_NETWORK":
+            obj.setState({
+              mensagem:
+                "Erro de Conexão, motivos -> Certificado ou Servidor Back-end, contate ao TI.",
+              modalMensageIsOpen: true,
+            });
+            break;
+          default:
+            break;
+        }
       });
-    }).catch((e) => {
-      switch (e.code) {
-        case "ERR_NETWORK":
-          obj.setState({
-            mensagem: "Erro de Conexão, motivos -> Certificado ou Servidor Back-end, contate ao TI.",
-            modalMensageIsOpen: true,
-          });
-          break;
-        default:
-          break;
-      }
-    })
-    await axios.post("https://localhost:8081/chamadas/update/file", requestFile(obj, "padrao"), {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }).catch((e) => {
-      // file da erro ERR_BAD_REQUEST
-      return
-    });
-  }
+    await axios
+      .post(
+        "https://qualityserver12:8081/chamadas/update/file",
+        requestFile(obj, "padrao"),
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .catch((e) => {
+        // file da erro ERR_BAD_REQUEST
+        return;
+      });
+  };
 
   RequestChamadasAbertasMaster = (obj) => {
-    axios.post("https://localhost:8081/chamadas/abertas", {
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Content-Type': 'application/json'
-      },
-    }).then((response) => {
-      const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
-      const dezPrimeiros = dadosOrdenados.slice(0, 10);
-      const tamanhoNovo = dezPrimeiros.length;
-      if (tamanhoNovo > Cookies.get("tamanhoPendente")) {
-        this.mostrarNotificacao(`${dezPrimeiros[0].nome}: ${dezPrimeiros[0].os}`);
-        obj.setState({ pendentes: dezPrimeiros });
-        Cookies.set("tamanhoPendente", tamanhoNovo);
-        return
-      } else {
-        obj.setState({ pendentes: dezPrimeiros });
-        Cookies.set("tamanhoPendente", tamanhoNovo);
-        return
-      }
-    })
+    axios
+      .post("https://qualityserver12:8081/chamadas/abertas",{}, {
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      })
+      .then((response) => {
+        const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
+        const dezPrimeiros = dadosOrdenados.slice(0, 10);
+        const tamanhoNovo = dezPrimeiros.length;
+        if (tamanhoNovo > Cookies.get("tamanhoPendente")) {
+          this.mostrarNotificacao(
+            `${dezPrimeiros[0].nome}: ${dezPrimeiros[0].os}`
+          );
+          obj.setState({ pendentes: dezPrimeiros });
+          Cookies.set("tamanhoPendente", tamanhoNovo);
+          return;
+        } else {
+          obj.setState({ pendentes: dezPrimeiros });
+          Cookies.set("tamanhoPendente", tamanhoNovo);
+          return;
+        }
+      })
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   RequestChamadasMusicasMaster = (obj) => {
-    axios.post("https://localhost:8081/chamadas/getmusica", {
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Content-Type': 'application/json'
-      },
-    }).then((response) => {
-      const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
-      const dezPrimeiros = dadosOrdenados.slice(0, 50);
-      const tamanhoNovo = dezPrimeiros.length;
-      if (tamanhoNovo > Cookies.get("tamanhoMusica")) {
-        obj.setState({ pendentes: dezPrimeiros });
-        Cookies.set("tamanhoMusica", tamanhoNovo);
-        return
-      } else {
-        obj.setState({ pendentes: dezPrimeiros });
-        Cookies.set("tamanhoMusica", tamanhoNovo);
-        return
-      }
-    })
+    axios
+      .post("https://qualityserver12:8081/chamadas/getmusica",{}, {
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      })
+      .then((response) => {
+        const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
+        const dezPrimeiros = dadosOrdenados.slice(0, 50);
+        const tamanhoNovo = dezPrimeiros.length;
+        if (tamanhoNovo > Cookies.get("tamanhoMusica")) {
+          obj.setState({ pendentes: dezPrimeiros });
+          Cookies.set("tamanhoMusica", tamanhoNovo);
+          return;
+        } else {
+          obj.setState({ pendentes: dezPrimeiros });
+          Cookies.set("tamanhoMusica", tamanhoNovo);
+          return;
+        }
+      })
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   RequestChamadasFechadasMaster = (obj) => {
     axios
-      .post("https://localhost:8081/chamadas/fechadas", hoje, {
+      .post("https://qualityserver12:8081/chamadas/fechadas", hoje, {
         headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Content-Type': 'application/json'
-        }
+          "Cache-Control": "no-cache",
+        },
       })
       .then((response) => {
         const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
         axios
-          .post("https://localhost:8081/chamadas/fechadas", ontem)
+          .post("https://qualityserver12:8081/chamadas/fechadas", ontem)
           .then((response) => {
-            const dadosOrdenadosOntem = response.data.sort((a, b) => b.id - a.id);
+            const dadosOrdenadosOntem = response.data.sort(
+              (a, b) => b.id - a.id
+            );
             dadosOrdenadosOntem.map((p) => {
-              dadosOrdenados.push(p)
-            })
-            obj.setState({ finalizado: dadosOrdenados })
-            Cookies.set('tamanhoFinalizado', dadosOrdenados.length)
-          })
+              dadosOrdenados.push(p);
+            });
+            obj.setState({ finalizado: dadosOrdenados });
+            Cookies.set("tamanhoFinalizado", dadosOrdenados.length);
+          });
       })
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   RequestChamadasAndamentoMaster = (obj) => {
     axios
-      .post("https://localhost:8081/chamadas/andamento", {
+      .post("https://qualityserver12:8081/chamadas/andamento",{}, {
         headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Content-Type': 'application/json'
-        }
-      }).then((response) => {
+          "Cache-Control": "no-cache",
+        },
+      })
+      .then((response) => {
         const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
         const dezPrimeiros = dadosOrdenados.slice(0, 10);
         const tamanhoNovo = dezPrimeiros.length;
@@ -134,20 +154,22 @@ export class RequestsSuporteTi {
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   RequestChamadasAbertasComum = (obj) => {
     const funcionario = JSON.parse(Cookies.get("user"));
     axios
-      .post("https://localhost:8081/chamadas/abertas/nome", {
-        nome: `${funcionario.nome} ${funcionario.sobrenome}`,
-      }, {
-        headers: {
-          'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
-          'Content-Type': 'application/json'
+      .post(
+        "https://qualityserver12:8081/chamadas/abertas/nome",
+        {
+          nome: `${funcionario.nome} ${funcionario.sobrenome}`,
         },
-
-      })
+        {
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        }
+      )
       .then((response) => {
         const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
         const dezPrimeiros = dadosOrdenados.slice(0, 10);
@@ -163,20 +185,22 @@ export class RequestsSuporteTi {
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   RequestChamadasAndamentoComum = (obj) => {
     const funcionario = JSON.parse(Cookies.get("user"));
     axios
-      .post("https://localhost:8081/chamadas/andamento/nome", {
-        nome: `${funcionario.nome} ${funcionario.sobrenome}`,
-      }, {
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Content-Type': 'application/json'
+      .post(
+        "https://qualityserver12:8081/chamadas/andamento/nome",
+        {
+          nome: `${funcionario.nome} ${funcionario.sobrenome}`,
         },
-
-      })
+        {
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        }
+      )
       .then((response) => {
         const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
         const dezPrimeiros = dadosOrdenados.slice(0, 10);
@@ -193,36 +217,35 @@ export class RequestsSuporteTi {
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   RequestChamadasFechadasComum = (obj) => {
     const funcionario = JSON.parse(Cookies.get("user"));
     const hoje = {
       dataHora: data,
       nome: `${funcionario.nome} ${funcionario.sobrenome}`,
-
-    }
+    };
     const ontem = {
       dataHora: dataAnterior,
       nome: `${funcionario.nome} ${funcionario.sobrenome}`,
-    }
+    };
     axios
-      .post("https://localhost:8081/chamadas/fechadas/nome", hoje)
+      .post("https://qualityserver12:8081/chamadas/fechadas/nome", hoje)
       .then((response) => {
         const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
         axios
-          .post("https://localhost:8081/chamadas/fechadas/nome", ontem, {
+          .post("https://qualityserver12:8081/chamadas/fechadas/nome", ontem, {
             headers: {
-              'Cache-Control': 'no-cache, no-store, must-revalidate',
-              'Content-Type': 'application/json'
+              "Cache-Control": "no-cache",
             },
-
           })
           .then((response) => {
-            const dadosOrdenadosOntem = response.data.sort((a, b) => b.id - a.id);
+            const dadosOrdenadosOntem = response.data.sort(
+              (a, b) => b.id - a.id
+            );
             dadosOrdenadosOntem.map((p) => {
-              dadosOrdenados.push(p)
-            })
+              dadosOrdenados.push(p);
+            });
             const tamanhoNovo = dadosOrdenados.length;
             if (tamanhoNovo > Cookies.get("tamanhoFinalizado")) {
               this.mostrarNotificacao("Um pedido seu foi Finalizado");
@@ -232,12 +255,12 @@ export class RequestsSuporteTi {
               obj.setState({ finalizado: dadosOrdenados });
               Cookies.set("tamanhoFinalizado", tamanhoNovo);
             }
-          })
+          });
       })
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   mostrarNotificacao = (mensagem) => {
     if ("Notification" in window && Notification.permission === "granted") {
@@ -256,23 +279,28 @@ export class RequestsSuporteTi {
 }
 
 export class UpdateSuporteTi {
-
   enviarParaFechado = async (item, obj, role) => {
     const funcionario = JSON.parse(Cookies.get("user"));
-    await axios.post("https://localhost:8081/chamadas/update/file", requestFile(obj, role), {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }).catch(err => {
-      console.log(err);
-    });
+    await axios
+      .post(
+        "https://qualityserver12:8081/chamadas/update/file",
+        requestFile(obj, role),
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .catch((err) => {
+        console.log(err);
+      });
 
     const dados = {
       id: item.id,
       status: "FECHADO",
-      responsavel: `${funcionario.nome} ${funcionario.sobrenome}`
+      responsavel: `${funcionario.nome} ${funcionario.sobrenome}`,
     };
-    const url = "https://localhost:8081/chamadas/atualizar/responsavel";
+    const url = "https://qualityserver12:8081/chamadas/atualizar/responsavel";
     axios.put(url, dados);
   };
 
@@ -281,9 +309,9 @@ export class UpdateSuporteTi {
     const dados = {
       id: item.id,
       status: "ANDAMENTO",
-      responsavel: `${funcionario.nome} ${funcionario.sobrenome}`
+      responsavel: `${funcionario.nome} ${funcionario.sobrenome}`,
     };
-    const url = "https://localhost:8081/chamadas/atualizar/responsavel";
+    const url = "https://qualityserver12:8081/chamadas/atualizar/responsavel";
     axios.put(url, dados);
   };
 
@@ -293,7 +321,7 @@ export class UpdateSuporteTi {
       id: item.id,
       status: "INATIVO",
     };
-    const url = "https://localhost:8081/chamadas/apagar";
+    const url = "https://qualityserver12:8081/chamadas/apagar";
     axios.put(url, dados);
   };
 
@@ -302,8 +330,7 @@ export class UpdateSuporteTi {
       id: item.id,
       status: "ABERTO",
     };
-    const url = "https://localhost:8081/chamadas/atualizar";
+    const url = "https://qualityserver12:8081/chamadas/atualizar";
     axios.put(url, dados);
   };
-
 }

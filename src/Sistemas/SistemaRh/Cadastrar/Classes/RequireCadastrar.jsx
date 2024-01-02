@@ -41,7 +41,7 @@ export class RequireCadastro {
         status: true,
       };
       axios.post(
-        `https://localhost:8081/rh/colaboradores/add?setor=${obj.state.setor}&empresa=${obj.state.empresa}&inicio=${obj.state.dataInicio}&dataNascimento=${obj.state.dataNascimento}`,
+        `https://qualityserver12:8081/rh/colaboradores/add?setor=${obj.state.setor}&empresa=${obj.state.empresa}&inicio=${obj.state.dataInicio}&dataNascimento=${obj.state.dataNascimento}`,
         colaboradorRh
       );
     } else if (obj.state.tipo === "ESTAGIARIO") {
@@ -52,7 +52,7 @@ export class RequireCadastro {
         status: true,
       };
       axios.post(
-        `https://localhost:8081/rh/colaboradores/estagiario/add?setor=${obj.state.setor}&empresa=${obj.state.empresa}&inicio=${obj.state.dataInicio}&dataNascimento=${obj.state.dataNascimento}`,
+        `https://qualityserver12:8081/rh/colaboradores/estagiario/add?setor=${obj.state.setor}&empresa=${obj.state.empresa}&inicio=${obj.state.dataInicio}&dataNascimento=${obj.state.dataNascimento}`,
         colaboradorRh
       );
     }
@@ -72,10 +72,10 @@ export class RequireCadastro {
 
   async cadastrarIntranet(obj) {
     const setor = await axios
-      .get(`https://localhost:8081/rh/setor/id?id=${obj.state.setor}`)
+      .get(`https://qualityserver12:8081/rh/setor/id?id=${obj.state.setor}`)
       .then((response) => response.data.nome);
     const empresa = await axios
-      .get(`https://localhost:8081/rh/empresas/id?id=${obj.state.empresa}`)
+      .get(`https://qualityserver12:8081/rh/empresas/id?id=${obj.state.empresa}`)
       .then((response) => response.data.nome);
     const colaboradorIntranet = {
       nome: primeroNome(obj.state.nomeCompleto),
@@ -108,10 +108,10 @@ export class RequireCadastro {
     };
 
     axios.post(
-      `https://localhost:8081/intranet/cadastrar`,
+      `https://qualityserver12:8081/intranet/cadastrar`,
       colaboradorIntranet
     );
-    axios.post(`https://localhost:8081/estoque/cadastrar`, colaboradorEstoque);
+    axios.post(`https://qualityserver12:8081/estoque/cadastrar`, colaboradorEstoque);
   }
 
   async enviarFotoColaborador(obj) {
@@ -125,7 +125,7 @@ export class RequireCadastro {
       )}${exten}`,
     };
     await axios.post(
-      `https://localhost:8081/rh/colaborador/update/foto`,
+      `https://qualityserver12:8081/rh/colaborador/update/foto`,
       requestFile,
       {
         headers: {

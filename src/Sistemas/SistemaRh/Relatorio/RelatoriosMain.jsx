@@ -17,12 +17,29 @@ export default class RelatoriosMain extends Component {
       Cookies.get("filtroRhColaborador") === null
         ? ""
         : Cookies.get("filtroRhColaborador"),
-    dataFinal: dataHoje,
-    dataInicial: dataInicialDefault,
+    dataFinal:
+      localStorage.getItem("dataFinal") === null
+        ? dataHoje
+        : localStorage.getItem("dataFinal"),
+    dataInicial:
+      localStorage.getItem("dataInicio") === null
+        ? dataInicialDefault
+        : localStorage.getItem("dataInicio"),
     foto: "",
     colaborador:
-      JSON.parse(localStorage.getItem("colaborador")) === null
-        ? ""
+      localStorage.getItem("colaborador") === null
+        ? {
+            idColaborador: "",
+            nome: "",
+            nomeCompleto: "",
+            dataAdmissao: "",
+            dataDemissao: "",
+            setor: "",
+            empresa: "",
+            tipo: "",
+            foto: "",
+            dataNascimento: "",
+          }
         : JSON.parse(localStorage.getItem("colaborador")),
     bancoHoras: this.dados === null ? 0 : this.dados.bancoHoras,
     bancoPositivo: this.dados === null ? 0 : this.dados.bancoPositivo,
@@ -33,7 +50,9 @@ export default class RelatoriosMain extends Component {
   require = new RelatoriosController();
 
   componentDidMount = () => {
-    this.require.getAllColabordoresNome(this);
+    this.setState({
+      selectCol: this.state.colaborador.idColaborador
+    })
   };
 
   render() {
@@ -82,14 +101,18 @@ export default class RelatoriosMain extends Component {
                 value={this.state.selectCol}
                 className="border border-stone-300 px-2 w-80 max-lg:w-52 bg-white h-8 text-sm"
                 onChange={(e) => {
-                  this.setState({ selectCol: e.target.value });
+                  this.setState({
+                    selectCol: e.target.value,
+                  });
                   if (e.target.value === "Todos") {
-                    this.require.getColaboradorDadosAll(this,this.state.dataInicial,this.state.dataFinal);
-
+                    this.require.getColaboradorDadosAll(
+                      this,
+                      this.state.dataInicial,
+                      this.state.dataFinal
+                    );
                     return;
                   }
                   this.require.getColaboradorDados(this, e.target.value);
-                  this.require.getDadosIndividual(this);
                 }}
               >
                 <option value="" disabled selected>
@@ -119,16 +142,22 @@ export default class RelatoriosMain extends Component {
                   type="date"
                   value={this.state.dataInicial}
                   onChange={(e) => {
+                    localStorage.setItem("dataInicio", e.target.value);
                     this.setState({
                       dataInicial: e.target.value,
                     });
-                    this.require.getColaboradorDadosAll(
+                    if (this.state.selectCol === "Todos") {
+                      this.require.getColaboradorDadosAll(
+                        this,
+                        this.state.dataInicial,
+                        this.state.dataFinal
+                      );
+                      return;
+                    }
+                    this.require.getColaboradorDados(
                       this,
-                      e.target.value,
-                      this.state.dataFinal
+                      this.state.selectCol
                     );
-
-                    localStorage.setItem("dataInicio", e.target.value);
                   }}
                   className="border border-stone-300 px-2 w-80 max-lg:w-52 bg-white h-8 text-sm"
                 />
@@ -141,13 +170,22 @@ export default class RelatoriosMain extends Component {
                   type="date"
                   value={this.state.dataFinal}
                   onChange={(e) => {
+                    localStorage.setItem("dataFinal", e.target.value);
                     this.setState({
                       dataFinal: e.target.value,
                     });
-                    this.require.getColaboradorDadosAll(
+                    if (this.state.selectCol === "Todos") {
+                      this.require.getColaboradorDadosAll(
+                        this,
+                        this.state.dataInicial,
+                        this.state.dataFinal
+                      );
+                      return;
+                    }
+                    
+                    this.require.getColaboradorDados(
                       this,
-                      this.state.dataInicial,
-                      e.target.value
+                      this.state.selectCol
                     );
                   }}
                   className="border border-stone-300  px-2 w-80 max-lg:w-52 bg-white h-8 text-sm"
@@ -155,7 +193,7 @@ export default class RelatoriosMain extends Component {
               </section>
             </section>
           </section>
-          <section>
+          <section className="flex gap-4">
             <button
               onClick={() => {
                 if (this.state.selectCol === "Todos") {
@@ -166,7 +204,15 @@ export default class RelatoriosMain extends Component {
               }}
               className="bg-white transition-colors border border-stone-300 px-12 h-10 rounded-md cursor-pointer hover:bg-stone-200 flex justify-center items-center font-medium"
             >
-              Gerar Relatório
+              Relatório Banco de Horas
+            </button>
+            <button
+              onClick={() => {
+                window.location.href = "/relatorio/geral";
+              }}
+              className="bg-white transition-colors border border-stone-300 px-12 h-10 rounded-md cursor-pointer hover:bg-stone-200 flex justify-center items-center font-medium"
+            >
+              Relatório Geral
             </button>
           </section>
         </section>

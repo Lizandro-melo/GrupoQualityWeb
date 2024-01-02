@@ -7,6 +7,7 @@ import FormLogin from "./Login/FormLogin";
 import SistemaRhModule from "./Sistemas/SistemaRh/SistemaRhModule";
 import Relatorio from "./Sistemas/SistemaRh/RelatiorioIndividual";
 import RelatorioAll from "./Sistemas/SistemaRh/RelatiorioTodos";
+import RelatorioGeral from "./Sistemas/SistemaRh/RelatorioGeral";
 
 export default class ModuleRoutes extends Component {
   state = {
@@ -42,6 +43,10 @@ export default class ModuleRoutes extends Component {
           <Route
             element={this.state.token ? <RelatorioAll /> : <Navigate to="/" />}
             path="/relatorio/all"
+          />
+          <Route
+            element={this.state.token ? <RelatorioGeral /> : <Navigate to="/" />}
+            path="/relatorio/geral"
           />
         </Routes>
       </BrowserRouter>
