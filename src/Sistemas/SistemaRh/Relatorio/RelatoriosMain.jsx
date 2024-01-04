@@ -23,7 +23,7 @@ export default class RelatoriosMain extends Component {
         : localStorage.getItem("dataFinal"),
     dataInicial:
       localStorage.getItem("dataInicio") === null
-        ? dataInicialDefault
+        ? dataHoje
         : localStorage.getItem("dataInicio"),
     foto: "",
     colaborador:
@@ -50,6 +50,12 @@ export default class RelatoriosMain extends Component {
   require = new RelatoriosController();
 
   componentDidMount = () => {
+    this.setState({
+      selectCol: this.state.colaborador.idColaborador,
+    });
+    this.require.getColaboradorDados(this, this.state.colaborador.idColaborador);
+    localStorage.setItem("dataFinal", dataHoje);
+    localStorage.setItem("dataInicio", dataHoje);
     this.setState({
       selectCol: this.state.colaborador.idColaborador
     })

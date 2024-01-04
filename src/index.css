@@ -2,14 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300&family=Sarabun:wght@700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300&family=Sarabun:wght@700&display=swap");
 
-@import url('https://fonts.googleapis.com/css2?family=Heebo&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Heebo&display=swap");
 
 * {
   transition-property: all !important;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
-  transition-duration: 200ms !important;
+  transition-duration: 300ms !important;
 }
 
 .h-tabela {
@@ -18,11 +18,11 @@
 }
 
 .kanit {
-  font-family: 'Kanit', sans-serif !important;
+  font-family: "Kanit", sans-serif !important;
 }
 
 .heebo {
-  font-family: 'Heebo', sans-serif;
+  font-family: "Heebo", sans-serif;
 }
 
 /* 
@@ -65,7 +65,7 @@ Certas classes definidas para coisas especificas
 
 .coluna-nav {
   width: 68px;
-  background: linear-gradient(#1E2D5E 0%, #172554 48%, white 100%);
+  background: linear-gradient(#1e2d5e 0%, #172554 48%, white 100%);
 }
 
 .h-5\/6-anotacao {
@@ -76,4 +76,142 @@ Certas classes definidas para coisas especificas
   max-height: 550px;
 }
 
-.teste {}
+.plano-fundo-login {
+  background-image: url("../public/img/fundo1.png");
+  width: 100vw;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: blur(5px);
+  background-size: cover;
+}
+
+@keyframes showModal {
+  0% {
+    transform: scale(0%);
+  }
+
+  50% {
+    transform: scale(105%);
+  }
+
+  100% {
+    transform: scale(100%);
+  }
+}
+
+@keyframes showModalTicket {
+  0% {
+    transform: scale(0%) translate(-50%, -50%);
+  }
+
+  50% {
+    transform: scale(105%) translate(-50%, -50%);
+  }
+
+  100% {
+    transform: scale(100%) translate(-50%, -50%);
+  }
+}
+
+@keyframes showNavBarVertical {
+  0% {
+    left: -100%;
+  }
+
+  50% {
+    left: -50%;
+  }
+
+  100% {
+    left: 0;
+  }
+}
+
+@keyframes showConteudoPrincipal {
+  0% {
+    right: -100%;
+  }
+
+  100% {
+    right: 0;
+  }
+}
+
+@keyframes hiddenModal {
+  0% {
+    transform: scale(100%);
+  }
+
+  50% {
+    transform: scale(0%);
+  }
+
+  100% {
+    transform: scale(0%);
+  }
+}
+
+@keyframes hiddenModalTicket {
+  0% {
+    transform: scale(100%) translate(-50%, -50%);
+  }
+
+  50% {
+    transform: scale(0%) translate(-50%, -50%);
+  }
+
+  100% {
+    transform: scale(0%) translate(-50%, -50%);
+  }
+}
+
+.spawnModal {
+  animation-name: showModal;
+  animation-duration: 600ms;
+  animation-fill-mode: forwards;
+  display: flex !important;
+}
+
+.spawnModalTicket {
+  animation-name: showModalTicket;
+  animation-duration: 600ms;
+  animation-fill-mode: forwards;
+  display: flex !important;
+}
+
+.hiddenModal {
+  animation-name: hiddenModal;
+  animation-duration: 600ms;
+  animation-fill-mode: forwards;
+}
+
+.spawnNavBarVertical {
+  animation-name: showNavBarVertical;
+  animation-duration: 1.4s;
+  animation-fill-mode: forwards;
+  position: relative;
+}
+
+.spawnConteudoPrincipal{
+  animation-name: showConteudoPrincipal;
+  animation-duration: 1.4s;
+  animation-fill-mode: forwards;
+  position: relative;
+}
+
+.h-11-12 {
+    height: 97.666667%;
+}
+
+.w-11-12 {
+    width: 97.666667%;
+}
+
+.max-h-96 {
+    max-height: 45rem/* 384px */;
+}
+
+.w-98{
+  width: 98.5%;
+}

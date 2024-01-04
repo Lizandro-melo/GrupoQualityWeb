@@ -49,8 +49,40 @@ export default class AtualizarSistemaRh extends Component {
         this,
         this.state.colaborador.idColaborador
       );
-
     }
+    this.setState({
+      user: JSON.parse(Cookies.get("user")),
+      colaboradoresList: [],
+      filtroColaborador:
+        Cookies.get("filtroRhColaborador") === null
+          ? ""
+          : Cookies.get("filtroRhColaborador"),
+      colaborador:
+        JSON.parse(localStorage.getItem("colaborador")) === null
+          ? ""
+          : JSON.parse(localStorage.getItem("colaborador")),
+      nomeCompleto:
+        JSON.parse(localStorage.getItem("colaborador")) === null
+          ? ""
+          : JSON.parse(localStorage.getItem("colaborador")).nomeCompleto,
+      dataNascimento: "",
+      empresa: "",
+      setor: "",
+      dataInicio: dataHoje,
+      dataDemissao: "",
+      tipo: "",
+      permissaoPrimaria: "",
+      permissaoSecundaria: "",
+      fotoColaborador: "",
+      senha: "",
+      comSenha: "",
+      mensagemModal: "",
+      modalState: false,
+      situacao: "Situação",
+      mensagemModalConfirmar: null,
+      modalComfirmarState: false,
+      acao: "",
+    });
     this.requireAnotacao.getAllNomesColaboradores(this);
   };
 
@@ -100,6 +132,8 @@ export default class AtualizarSistemaRh extends Component {
                         break;
                       case "reativar":
                         this.require.reativarColaborador(this);
+                        break;
+                      default:
                         break;
                     }
                     this.fecharModalConfirmar();
@@ -158,6 +192,30 @@ export default class AtualizarSistemaRh extends Component {
               <select
                 className="w-full h-10 px-2 rounded-lg border border-stone-300 text-sm"
                 onChange={(e) => {
+                  this.setState({
+                    user: JSON.parse(Cookies.get("user")),
+                    filtroColaborador:
+                      Cookies.get("filtroRhColaborador") === null
+                        ? ""
+                        : Cookies.get("filtroRhColaborador"),
+                    dataNascimento: "",
+                    empresa: "",
+                    setor: "",
+                    dataInicio: dataHoje,
+                    dataDemissao: "",
+                    tipo: "",
+                    permissaoPrimaria: "",
+                    permissaoSecundaria: "",
+                    fotoColaborador: "",
+                    senha: "",
+                    comSenha: "",
+                    mensagemModal: "",
+                    modalState: false,
+                    situacao: "Situação",
+                    mensagemModalConfirmar: null,
+                    modalComfirmarState: false,
+                    acao: "",
+                  });
                   this.require.getDadosColaborador(this, e.target.value);
                 }}
               >

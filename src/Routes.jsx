@@ -1,13 +1,13 @@
 import { Home } from "./Home";
-import ModuleSuporteTi from "./Sistemas/SuporteTi/ModuleSuporteTi";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Component } from "react";
 import Cookies from "js-cookie";
-import FormLogin from "./Login/FormLogin";
 import SistemaRhModule from "./Sistemas/SistemaRh/SistemaRhModule";
 import Relatorio from "./Sistemas/SistemaRh/RelatiorioIndividual";
 import RelatorioAll from "./Sistemas/SistemaRh/RelatiorioTodos";
 import RelatorioGeral from "./Sistemas/SistemaRh/RelatorioGeral";
+import FormLogin from "./Login/page";
+import SuporteTi from "./Sistemas/SuporteTi/page";
 
 export default class ModuleRoutes extends Component {
   state = {
@@ -33,7 +33,7 @@ export default class ModuleRoutes extends Component {
             path="/home"
           />
           <Route
-            element={this.state.token ? <ModuleSuporteTi /> : <Navigate to="/" />}
+            element={this.state.token ? <SuporteTi /> : <Navigate to="/" />}
             path="/chamadas"
           />
           <Route

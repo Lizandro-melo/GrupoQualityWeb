@@ -1,9 +1,9 @@
 export default class FuncionarioEntityEstoque {
-    _id;
-    _nome;
-    _setor;
-    _login;
-    _senha;
-    _permissao;
-    _habilitado;
+    id;
+    nome;
+    setor;
+    login;
+    senha;
+    permissao;
+    habilitado;
 }

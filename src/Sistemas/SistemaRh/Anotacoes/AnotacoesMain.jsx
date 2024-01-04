@@ -54,7 +54,7 @@ export default class AnotacoesMain extends Component {
     dataInicial:
       localStorage.getItem("dataInicio") !== null
         ? localStorage.getItem("dataInicio")
-        : dataInicialDefault,
+        : dataFinalDefault,
     modalIsOpenCriarAnotacao: false,
     modalIsOpenEditarAnotacao: false,
     modalIsOpenMensagem: false,

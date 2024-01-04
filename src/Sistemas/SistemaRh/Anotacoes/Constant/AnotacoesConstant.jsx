@@ -7,6 +7,7 @@ dia = dia.toString().length < 2 ? `0${dia}` : dia
 mes = mes.toString().length < 2 ? `0${mes}` : mes
 diaAtual = diaAtual.toString().length < 2 ? `0${diaAtual}` : diaAtual
 export const dataInicialDefault = dia <= 0 ? `${ano}-${dataObj.getMonth()}-23` : `${ano}-${mes}-${dia}`
+console.log(dataInicialDefault);
 export const dataFinalDefault = `${ano}-${mes}-${diaAtual}`;
 export const dataHoje = `${ano}-${mes}-${diaAtual}`;
 
