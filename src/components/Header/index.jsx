@@ -13,17 +13,17 @@ export default function Header() {
   return (
     <>
       <header
-        className={` z-50 bg-blue-950 p-8 flex justify-between items-center h-16 w-screen sticky top-0`}
+        className={`shadow-xl z-50 bg-blue-950 p-8 flex justify-between items-center h-16 w-screen sticky top-0`}
       >
         <section className="flex items-center gap-10">
           <img
             title="Sistema Quality Web"
-            className="drop-shadow-lg cursor-pointer"
+            className="drop-shadow-lg cursor-pointer max-lg:w-11"
             onClick={() => (window.location.href = "/home")}
             src="/icon/iconQuality.png"
             alt="Logo quality"
           />
-          <span className="text-white font-medium">
+          <span className="text-white font-medium max-sm:hidden">
             {user.nome} {user.sobrenome}, bem vindo!
           </span>
         </section>
@@ -32,7 +32,7 @@ export default function Header() {
           className="flex overflow-hidden gap-2 group cursor-pointer items-center active:scale-95 active:opacity-75 relative"
         >
           <img
-            className="w-7 bg-blue-950 z-10 relative"
+            className="w-7 bg-blue-950 z-10 relative max-lg:w-6"
             src="/icon/sairIcon.svg"
             alt="Icone de sair"
           />
@@ -46,7 +46,7 @@ export default function Header() {
       >
         <section className="bg-stone-50 opacity-70 w-screen h-screen absolute"></section>
         <section
-          className={`w-2/5 h-2/5 hidden bg-white rounded-lg flex-col shadow-lg border ${stateModalExit} justify-evenly items-center`}
+          className={`w-2/5 h-2/5 hidden bg-white rounded-lg flex-col shadow-lg border ${stateModalExit} justify-evenly items-center max-lg:w-full`}
         >
           <section>
             <span className="text-xl text-blue-950 font-semibold">

@@ -2,12 +2,12 @@ import { Home } from "./Home";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Component } from "react";
 import Cookies from "js-cookie";
-import SistemaRhModule from "./Sistemas/SistemaRh/SistemaRhModule";
 import Relatorio from "./Sistemas/SistemaRh/RelatiorioIndividual";
 import RelatorioAll from "./Sistemas/SistemaRh/RelatiorioTodos";
 import RelatorioGeral from "./Sistemas/SistemaRh/RelatorioGeral";
 import FormLogin from "./Login/page";
 import SuporteTi from "./Sistemas/SuporteTi/page";
+import SistemaRH from "./Sistemas/SistemaRh/page";
 
 export default class ModuleRoutes extends Component {
   state = {
@@ -25,7 +25,7 @@ export default class ModuleRoutes extends Component {
             path="/"
           />
           <Route
-            element={this.state.token ? <SistemaRhModule /> : <Navigate to="/home" />}
+            element={this.state.token ? <SistemaRH /> : <Navigate to="/home" />}
             path="/colaboradores"
           />
           <Route

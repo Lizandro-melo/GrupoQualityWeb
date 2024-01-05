@@ -3,10 +3,11 @@ import iconAnotar from "../../img/icon/anotar.png";
 import iconAddFuncionario from "../../img/icon/addFuncionario.png";
 import iconAtualizar from "../../img/icon/atualizar.png";
 import iconRelatorio from "../../img/icon/relatorio.png";
-import AnotacoesMain from "./Anotacoes/AnotacoesMain";
-import CadastrarSistemaRh from "./Cadastrar/CadastrarSistemaRh";
-import AtualizarSistemaRh from "./Atualizar/AtualizarSistemaRh";
+import AnotacoesMain from "./Anotacoes/page";
+import CadastrarSistemaRh from "./Cadastrar/page";
+import AtualizarSistemaRh from "./Atualizar/page";
 import RelatoriosMain from "./Relatorio/RelatoriosMain";
+import Relatorios from "./Relatorio/page";
 
 export default class SistemaRhMain extends Component {
   state = {
@@ -92,10 +93,10 @@ export default class SistemaRhMain extends Component {
           </section>
         </section>
         <section className="p-3 h-full flex w-full z-10">
-          {this.state.select === "Anotação" ? <AnotacoesMain /> : ""}
-          {this.state.select === "Cadastro" ? <CadastrarSistemaRh /> : ""}
-          {this.state.select === "Atualizar" ? <AtualizarSistemaRh /> : ""}
-          {this.state.select === "Relatorios" ? <RelatoriosMain /> : ""}
+          {this.state.select === "Anotação" && <AnotacoesMain />}
+          {this.state.select === "Cadastro" ? <CadastrarSistemaRh />}
+          {this.state.select === "Atualizar" ? <AtualizarSistemaRh /> }
+          {this.state.select === "Relatorios" ? <Relatorios />}
         </section>
       </section>
     );

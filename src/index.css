@@ -193,7 +193,7 @@ Certas classes definidas para coisas especificas
   position: relative;
 }
 
-.spawnConteudoPrincipal{
+.spawnConteudoPrincipal {
   animation-name: showConteudoPrincipal;
   animation-duration: 1.4s;
   animation-fill-mode: forwards;
@@ -201,17 +201,30 @@ Certas classes definidas para coisas especificas
 }
 
 .h-11-12 {
-    height: 97.666667%;
+  height: 97.666667%;
 }
 
 .w-11-12 {
-    width: 97.666667%;
+  width: 97.666667%;
 }
 
-.max-h-96 {
-    max-height: 45rem/* 384px */;
-}
-
-.w-98{
+.w-98 {
   width: 98.5%;
 }
+
+@media not all and (min-width: 1024px) {
+  .spawnNavBarVertical {
+    animation: none;
+  }
+}
+
+@media not all and (min-height: 1024px) {
+  .max-h-96 {
+    max-height: 30rem /* 384px */;
+  }
+}
+
+.max-h-99 {
+    max-height: 66% /* 384px */;
+  }
+

@@ -7,7 +7,7 @@ export class RelatoriosController {
 
   getAllColabordoresNome(obj) {
     axios
-      .post("https://qualityserver12:8081/rh/colaboradores/contratados/ativos")
+      .post("https://localhost:8081/rh/colaboradores/contratados/ativos")
       .then((response) => {
         const colaboradores = response.data;
         const ordenAlfabetica = colaboradores.sort((a, b) =>
@@ -53,7 +53,7 @@ export class RelatoriosController {
     obj.state.colaboradoresList.map((colaborador) => {
       axios
         .get(
-          `https://qualityserver12:8081/rh/colaborador/soma?id=${
+          `https://localhost:8081/rh/colaborador/soma?id=${
             colaborador.idColaborador
           }&inicio=${localStorage.getItem(
             "dataInicio"
@@ -87,7 +87,7 @@ export class RelatoriosController {
 
   getColaboradorDados(obj, idColaborador) {
     axios
-      .post(`https://qualityserver12:8081/rh/colaboradores/id?id=${idColaborador}`)
+      .post(`https://localhost:8081/rh/colaboradores/id?id=${idColaborador}`)
       .then((response) => {
         const colaborador = response.data;
         let dataAdmissao = colaborador.dataAdmissao;
@@ -185,7 +185,7 @@ export class RelatoriosController {
 
     axios
       .get(
-        `https://qualityserver12:8081/rh/colaborador/soma?id=${
+        `https://localhost:8081/rh/colaborador/soma?id=${
           colaborador.idColaborador
         }&inicio=${localStorage.getItem(
           "dataInicio"
@@ -220,7 +220,7 @@ export class RelatoriosController {
     const colaborador = JSON.parse(localStorage.getItem("colaborador"));
     axios
       .post(
-        `https://qualityserver12:8081/rh/anotacao/id?id=${idColaborador}&inicio=${dataIncio}&fim=${dataFinal}&tipo=${colaborador.tipo}`
+        `https://localhost:8081/rh/anotacao/id?id=${idColaborador}&inicio=${dataIncio}&fim=${dataFinal}&tipo=${colaborador.tipo}`
       )
       .then((response) => {
         if (response.data === null) {

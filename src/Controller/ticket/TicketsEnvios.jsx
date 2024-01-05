@@ -6,7 +6,7 @@ import AbrirTicketDTO from "../../dto/AbrirTicketDTO";
 
 export async function EnviarParaFinalizado(id, responsavel) {
   const ticket = new TicketMovimentarDTO(id, responsavel);
-  const url = "https://qualityserver12:8081/ticket/enviar/finalizado";
+  const url = "https://localhost:8081/ticket/enviar/finalizado";
   await axios
     .post(url, ticket, {
       headers: {
@@ -20,7 +20,7 @@ export async function EnviarParaFinalizado(id, responsavel) {
 
 export async function EnviarParaAndamento(id, responsavel) {
   const ticket = new TicketMovimentarDTO(id, responsavel);
-  const url = "https://qualityserver12:8081/ticket/enviar/andamento";
+  const url = "https://localhost:8081/ticket/enviar/andamento";
   await axios
     .post(url, ticket, {
       headers: {
@@ -33,7 +33,7 @@ export async function EnviarParaAndamento(id, responsavel) {
 }
 export async function EnviarParaPendente(id, responsavel) {
   const ticket = new TicketMovimentarDTO(id, responsavel);
-  const url = "https://qualityserver12:8081/ticket/enviar/pendente";
+  const url = "https://localhost:8081/ticket/enviar/pendente";
   await axios
     .post(url, ticket, {
       headers: {
@@ -56,7 +56,7 @@ export async function EnviarTicket(
   const user = JSON.parse(Cookies.get("user"));
   const dateHora = new Date().toLocaleString();
   const ticketDTO = new AbrirTicketDTO(user, dateHora, mensagem);
-  const url = `https://qualityserver12:8081/ticket/abrir`;
+  const url = `https://localhost:8081/ticket/abrir`;
   axios
     .post(url, ticketDTO, {
       headers: {
@@ -86,7 +86,7 @@ export async function EnviarTicket(
 }
 
 export function DeletarTicket(id) {
-  const url = `https://qualityserver12:8081/ticket/deletar?id=${id}`;
+  const url = `https://localhost:8081/ticket/deletar?id=${id}`;
   axios
   .delete(url, {
       headers: {

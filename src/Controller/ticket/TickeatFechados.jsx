@@ -5,7 +5,7 @@ import GetTicketFechados from "../../dto/GetTicketsFechadosNome";
 
 export function RequestFechadosMaster(setFinalizados) {
   axios
-    .get(`https://qualityserver12:8081/ticket/fechadas?data=${hoje}`, {
+    .get(`https://localhost:8081/ticket/fechadas?data=${hoje}`, {
       headers: {
         "Content-Type": "application/json",
         "Cache-Control": "no-cache",
@@ -15,7 +15,7 @@ export function RequestFechadosMaster(setFinalizados) {
     .then((response) => {
       const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
       axios
-        .get(`https://qualityserver12:8081/ticket/fechadas?data=${ontem}`, {
+        .get(`https://localhost:8081/ticket/fechadas?data=${ontem}`, {
           headers: {
             "Content-Type": "application/json",
             "Cache-Control": "no-cache",
@@ -41,7 +41,7 @@ export function RequestFechadosComum(setFinalizados) {
   const ticketHoje = new GetTicketFechados(funcionario, hoje)
   const ticketOntem = new GetTicketFechados(funcionario, ontem)
   axios
-    .post("https://qualityserver12:8081/ticket/fechadas/nome", ticketHoje, {
+    .post("https://localhost:8081/ticket/fechadas/nome", ticketHoje, {
       headers: {
         "Content-Type": "application/json",
         "Cache-Control": "no-cache",
@@ -51,7 +51,7 @@ export function RequestFechadosComum(setFinalizados) {
     .then((response) => {
       const dadosOrdenados = response.data.sort((a, b) => b.id - a.id);
       axios
-        .post("https://qualityserver12:8081/ticket/fechadas/nome", ticketOntem, {
+        .post("https://localhost:8081/ticket/fechadas/nome", ticketOntem, {
           headers: {
             "Content-Type": "application/json",
             "Cache-Control": "no-cache",

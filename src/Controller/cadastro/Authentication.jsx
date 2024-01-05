@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 export default async function EfetuarLogin(event, login, senha, modalState, modalMensagem) {
   event.preventDefault();
   const authDTO = new AuthDTO(login.toLocaleLowerCase(), senha);
-  const url = "https://qualityserver12:8081/auth/login";
+  const url = "https://localhost:8081/auth/login";
   await axios
     .post(url, authDTO, {
       headers: {

@@ -6,7 +6,7 @@ import GetTicketFechados from "../../dto/GetTicketsFechadosNome";
 export function RequestAndamentoMaster(listaAndamento) {
   axios
     .post(
-      "https://qualityserver12:8081/ticket/andamento",
+      "https://localhost:8081/ticket/andamento",
       {},
       {
         headers: {
@@ -39,7 +39,7 @@ export function RequestAndamentoComum(listaAndamento){
   const ticket = new GetTicketFechados(funcionario)
   axios
     .post(
-      "https://qualityserver12:8081/ticket/andamento/nome", ticket,
+      "https://localhost:8081/ticket/andamento/nome", ticket,
       {
         headers: {
           "Content-Type": "application/json",

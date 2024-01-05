@@ -52,9 +52,9 @@ export default function ListaPendentesMaster() {
             className="absolute bg-stone-100 opacity-70 w-full h-full"
           ></section>
           <section
-            className={`rounded-xl z-20 w-3/4 py-24 shadow-xl bg-white border border-stone-200 absolute left-2/4 top-2/4 flex-col justify-center items-center flex -translate-x-2/4 -translate-y-2/4 gap-20 ${stateModalTicket}`}
+            className={`rounded-xl z-20 w-3/4 py-20 shadow-xl bg-white border border-stone-200 absolute left-2/4 top-2/4 flex-col justify-center items-center flex -translate-x-2/4 -translate-y-2/4 gap-14 ${stateModalTicket} max-md:w-full max-lg:py-10 max-md:gap-14`}
           >
-            <section className="flex gap-3">
+            <section className="flex gap-3 max-md:scale-75">
               <span>
                 <img
                   className="w-32 rounded-xl"
@@ -113,9 +113,9 @@ export default function ListaPendentesMaster() {
             className="absolute bg-stone-100 opacity-70 w-full h-full"
           ></section>
           <section
-            className={`rounded-xl z-20 w-3/4 py-24 shadow-xl bg-white border border-stone-200 absolute left-2/4 top-2/4 flex-col justify-center items-center flex -translate-x-2/4 -translate-y-2/4 gap-20 ${stateModalTicket}`}
+            className={`rounded-xl z-20 w-3/4 py-20 shadow-xl bg-white border border-stone-200 absolute left-2/4 top-2/4 flex-col justify-center items-center flex -translate-x-2/4 -translate-y-2/4 gap-14 ${stateModalTicket} max-md:w-full max-lg:py-10 max-md:gap-14`}
           >
-            <section className="flex gap-3">
+            <section className="flex gap-3 max-md:scale-75">
               <span>
                 <img
                   className="w-32 rounded-xl"
@@ -152,7 +152,7 @@ export default function ListaPendentesMaster() {
         <span className="text-xl font-semibold">PENDENTES</span>
       </section>
       <hr className="" />
-      <section className="w-full max-h-96 px-2 py-3 rounded-b-xl">
+      <section className="w-full max-h-96 px-2 py-3 rounded-b-xl overflow-auto">
         <table className="justify-center items-center max-lg:items-start flex flex-col overflow-auto">
           <tbody className="text-sm">
             <tr>

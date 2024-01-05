@@ -6,7 +6,7 @@ import GetTicketFechados from "../../dto/GetTicketsFechadosNome";
 export function RequestPendenteMaster(listaPendentes) {
     axios
       .post(
-        "https://qualityserver12:8081/ticket/abertas",
+        "https://localhost:8081/ticket/abertas",
         {},
         {
           headers: {
@@ -40,7 +40,7 @@ export function RequestPendenteComum(listaPendentes){
   const ticket = new GetTicketFechados(funcionario);
   axios
     .post(
-      "https://qualityserver12:8081/ticket/abertas/nome", ticket,
+      "https://localhost:8081/ticket/abertas/nome", ticket,
       {
         headers: {
           "Content-Type": "application/json",

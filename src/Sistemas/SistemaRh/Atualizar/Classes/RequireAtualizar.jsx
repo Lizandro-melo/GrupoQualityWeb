@@ -13,7 +13,7 @@ import Cookies from "js-cookie";
 export class RequireAtualizar {
   getDadosColaborador(obj, idColaborador) {
     axios
-      .post(`https://qualityserver12:8081/rh/colaboradores/id?id=${idColaborador}`)
+      .post(`https://localhost:8081/rh/colaboradores/id?id=${idColaborador}`)
       .then((element) => {
         const colaborador = element.data;
         this.salvarColaborador(colaborador);
@@ -53,7 +53,7 @@ export class RequireAtualizar {
         });
         axios
           .post(
-            `https://qualityserver12:8081/intranet/colaborador/nome?nome=${colaborador.nome.toLowerCase()}`
+            `https://localhost:8081/intranet/colaborador/nome?nome=${colaborador.nome.toLowerCase()}`
           )
           .then((element) => {
             const colaborador = element.data[0];
@@ -125,7 +125,7 @@ export class RequireAtualizar {
 
     axios
       .put(
-        `https://qualityserver12:8081/rh/contratar/estagiario?id=${colaborador.idColaborador}&data=${dataHoje}`
+        `https://localhost:8081/rh/contratar/estagiario?id=${colaborador.idColaborador}&data=${dataHoje}`
       )
       .then((response) => response.data.nome);
     obj.setState({
@@ -147,7 +147,7 @@ export class RequireAtualizar {
     }
     axios
       .put(
-        `https://qualityserver12:8081/rh/colaborador/desligar?id=${
+        `https://localhost:8081/rh/colaborador/desligar?id=${
           colaborador.idColaborador
         }&data=${dataHoje}&responsavel=${user.nome} ${
           user.sobrenome
@@ -175,7 +175,7 @@ export class RequireAtualizar {
     }
     axios
       .put(
-        `https://qualityserver12:8081/rh/colaborador/reativar?id=${
+        `https://localhost:8081/rh/colaborador/reativar?id=${
           colaborador.idColaborador
         }&responsavel=${user.nome} ${
           user.sobrenome
@@ -193,11 +193,11 @@ export class RequireAtualizar {
     const user = JSON.parse(Cookies.get("user"));
 
     const setor = await axios
-      .get(`https://qualityserver12:8081/rh/setor/id?id=${obj.state.setor}`)
+      .get(`https://localhost:8081/rh/setor/id?id=${obj.state.setor}`)
       .then((response) => response.data.nome);
 
     const empresa = await axios
-      .get(`https://qualityserver12:8081/rh/empresas/id?id=${obj.state.empresa}`)
+      .get(`https://localhost:8081/rh/empresas/id?id=${obj.state.empresa}`)
       .then((response) => response.data.nome);
 
     const colaboradorIntra = {
@@ -223,7 +223,7 @@ export class RequireAtualizar {
     switch (obj.state.tipo) {
       case "CONTRATADO":
         axios.put(
-          `https://qualityserver12:8081/rh/colaboradores/update/contratado?setor=${
+          `https://localhost:8081/rh/colaboradores/update/contratado?setor=${
             obj.state.setor
           }&empresa=${obj.state.empresa}&dataNascimento=${
             obj.state.dataNascimento
@@ -237,7 +237,7 @@ export class RequireAtualizar {
         break;
       case "ESTAGIARIO":
         axios.put(
-          `https://qualityserver12:8081/rh/colaboradores/update/estagiario?setor=${
+          `https://localhost:8081/rh/colaboradores/update/estagiario?setor=${
             obj.state.setor
           }&empresa=${obj.state.empresa}&dataNascimento=${
             obj.state.dataNascimento
@@ -254,7 +254,7 @@ export class RequireAtualizar {
     }
 
     axios.put(
-      `https://qualityserver12:8081/rh/colaboradores/intranet/update?dataInicio=${formatarData(
+      `https://localhost:8081/rh/colaboradores/intranet/update?dataInicio=${formatarData(
         obj.state.dataInicio
       )}`,
       colaboradorIntra
