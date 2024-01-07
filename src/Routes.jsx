@@ -1,4 +1,4 @@
-import { Home } from "./Home";
+import Home from "./Home";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Component } from "react";
 import Cookies from "js-cookie";

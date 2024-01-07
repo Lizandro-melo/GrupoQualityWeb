@@ -1,7 +1,6 @@
 import axios from "axios";
 import TicketMovimentarDTO from "../../dto/TicketMovimentarDTO";
 import Cookies from "js-cookie";
-import ChamadasEntitysistemaos from "../../Entity/sistemaos/ChamadasEntitySistemaos";
 import AbrirTicketDTO from "../../dto/AbrirTicketDTO";
 
 export async function EnviarParaFinalizado(id, responsavel) {
