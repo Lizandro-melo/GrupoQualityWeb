@@ -1,16 +1,22 @@
 import { Component, useEffect, useState } from "react";
 import iconFiltro from "../../../img/icon/filtro.png";
 import { RequisicaoAnotacao } from "./Classes/RequisicaoAnotacao";
-import { formatarDataInput } from "./Constant/AnotacoesConstant";
+import { formatarData, formatarDataInput } from "./Constant/AnotacoesConstant";
 import ReactModal from "react-modal";
 import Cookies from "js-cookie";
 import FormCriarAnotacao from "./FormCriarAnotacao";
 import FormEditarAnotacao from "./FormEditarAnotacao";
 import Header from "../../../components/Header";
 import { DataHoje } from "../../../Constant/Constantes";
+import {
+  getContratados,
+  getDesligados,
+  getEstagiarios,
+} from "../../../Controller/sistemarh/SistemaRhPuxarColaboradores";
+import { getColaboradorById } from "../../../Controller/sistemarh/SistemaRhPuxarDados";
 
 export default function CriarAnotacao() {
-  const [listaColaboradores, setListaColaboradores] = useState([]);
+  const [listaContratados, setListaContratados] = useState([]);
   const [listaEstagiarios, setListaEstagiarios] = useState([]);
   const [listaDesligados, setListaDesligados] = useState([]);
   const [selectCategoria, setSelectCotegoria] = useState("Contratados");
@@ -20,18 +26,32 @@ export default function CriarAnotacao() {
   const [colaborador, setColaborador] = useState({
     idColaborador: "",
     nome: "",
-    dataNascimento: "",
-    nomecompleto: "",
+    dataNascimento: null,
+    nomeCompleto: "",
     tipo: "",
     dataDemissao: "",
     dataAdmissao: "",
-    setor: "",
-    empresa: "",
-    estagiario: "",
+    setor: {
+      idSetor: "",
+      nome: "",
+    },
+    empresa: {
+      idEmpresa: "",
+      nome: "",
+    },
+    estagiario: {
+      dataAdmissao: null,
+      dataDemissao: "",
+      status: null,
+    },
     status: "",
   });
 
-  useEffect(() => {});
+  useEffect(() => {
+    getContratados(setListaContratados);
+    getDesligados(setListaDesligados);
+    getEstagiarios(setListaEstagiarios);
+  }, [setListaContratados, setListaDesligados, setListaEstagiarios]);
 
   return (
     <>
@@ -44,17 +64,30 @@ export default function CriarAnotacao() {
           <section>
             <img
               className="w-28 rounded-lg"
-              src="/foto-funcionarios/josé melo.png"
+              src={`/foto-funcionarios/${
+                colaborador.nome === "" ? "todos" : colaborador.nome
+              }.png`}
               alt="foto do funcionario"
             />
           </section>
           <section className="flex flex-col ">
-            <span>Nome: </span>
-            <span>Setor: </span>
-            <span>Empresa: </span>
-            <span>Tipo: </span>
-            <span>Contrado: </span>
-            <span>Data de Nascimento: </span>
+            <span>Nome: {colaborador.nomeCompleto}</span>
+            <span>Setor: {colaborador.setor.nome}</span>
+            <span>Empresa: {colaborador.empresa.nome}</span>
+            <span>Tipo: {colaborador.tipo}</span>
+            <span>
+              Contrado:{" "}
+              {selectCategoria === "Estagiarios" &&
+                formatarData(colaborador.estagiario.dataAdmissao)}
+              {selectCategoria === "Contratados" &&
+                formatarData(colaborador.dataAdmissao)}
+            </span>
+            <span>
+              Data de Nascimento:{" "}
+              {colaborador.dataNascimento === null
+                ? "Não informado"
+                : formatarData(colaborador.dataNascimento)}
+            </span>
           </section>
         </section>
         <section className="w-full flex flex-col">
@@ -62,15 +95,39 @@ export default function CriarAnotacao() {
             <section className="w-full flex gap-2">
               <section className="flex w-full flex-col gap-2">
                 <label>Colaboradores</label>
-                <select className="h-9 border border-stone-300 rounded-md outline-none">
-                  <option value="Any">Colaborador</option>
-                  {listaColaboradores.map((colaborador) => {
-                    return (
-                      <option value={colaborador.idColaborador}>
-                        {colaborador.nomecompleto}
-                      </option>
-                    );
-                  })}
+                <select
+                  onChange={(e) =>
+                    getColaboradorById(e.target.value, setColaborador)
+                  }
+                  className="h-9 border border-stone-300 rounded-md outline-none"
+                >
+                  <option selected value="Any">
+                    Colaborador
+                  </option>
+                  {selectCategoria === "Contratados" &&
+                    listaContratados.map((colaborador) => {
+                      return (
+                        <option value={colaborador.idColaborador}>
+                          {colaborador.nomeCompleto}
+                        </option>
+                      );
+                    })}
+                  {selectCategoria === "Estagiarios" &&
+                    listaEstagiarios.map((colaborador) => {
+                      return (
+                        <option value={colaborador.idColaborador}>
+                          {colaborador.nomeCompleto}
+                        </option>
+                      );
+                    })}
+                  {selectCategoria === "Desligados" &&
+                    listaDesligados.map((colaborador) => {
+                      return (
+                        <option value={colaborador.idColaborador}>
+                          {colaborador.nomeCompleto}
+                        </option>
+                      );
+                    })}
                 </select>
                 <section className="flex gap-2">
                   <section className="flex gap-2">
@@ -79,6 +136,8 @@ export default function CriarAnotacao() {
                       type="radio"
                       name="tipoColaborador"
                       value="Contratados"
+                      onChange={(e) => setSelectCotegoria(e.target.value)}
+                      checked={selectCategoria === "Contratados"}
                     />
                   </section>
                   <section className="flex gap-2">
@@ -87,6 +146,8 @@ export default function CriarAnotacao() {
                       type="radio"
                       name="tipoColaborador"
                       value="Estagiarios"
+                      onChange={(e) => setSelectCotegoria(e.target.value)}
+                      checked={selectCategoria === "Estagiarios"}
                     />
                   </section>
                   <section className="flex gap-2">
@@ -95,6 +156,8 @@ export default function CriarAnotacao() {
                       type="radio"
                       name="tipoColaborador"
                       value="Desligados"
+                      onChange={(e) => setSelectCotegoria(e.target.value)}
+                      checked={selectCategoria === "Desligados"}
                     />
                   </section>
                 </section>
@@ -185,10 +248,10 @@ export default function CriarAnotacao() {
             <span>Data de Nascimento: </span>
           </section>
         </section>
-        <section className="flex w-full h-full overflow-auto bg-white border border-stone-300">
-          <section className="w-full h-full overflow-auto">
-            <section className="gap-2 flex flex-col justify-end py-2 px-1 overflow-auto">
-              <section className="w-full flex flex-col gap-3 text-sm border bg-white rounded-md p-2">
+        <section className="flex w-full h-full bg-white border border-stone-300">
+          <ul className="scrollable-list w-full relative">
+            <section className="flex flex-col gap-3 absolute">
+              <li className="w-full flex flex-col gap-3 text-sm border bg-white rounded-md p-2">
                 <section className="flex gap-3">
                   <section>
                     <legend>Motivo: Faltou</legend>
@@ -209,10 +272,55 @@ export default function CriarAnotacao() {
                     quod?
                   </p>
                 </section>
-              </section>
+              </li>
             </section>
-          </section>
-          <section className="w-full h-full"></section>
+          </ul>
+          <ul className="flex flex-col h-full w-2/5">
+            <li className="whitespace-nowrap flex justify-between px-10 h-full items-center border">
+              <span>Banco de horas</span>
+              <span>{0}</span>
+            </li>
+            <li className="whitespace-nowrap flex justify-between px-10 h-full items-center border">
+              <span>Hora extra</span>
+              <span>{0}</span>
+            </li>
+            <li className="whitespace-nowrap flex justify-between px-10 h-full items-center border">
+              <span>Faltas</span>
+              <span>{0}</span>
+            </li>
+            <li className="whitespace-nowrap flex justify-between px-10 h-full items-center border">
+              <span>Atestado hora</span>
+              <span>{0}</span>
+            </li>
+            <li className="whitespace-nowrap flex justify-between px-10 h-full items-center border">
+              <span>Atestado dias</span>
+              <span>{0}</span>
+            </li>
+            <li className="whitespace-nowrap flex justify-between px-10 h-full items-center border">
+              <span>Licença</span>
+              <span>{0}</span>
+            </li>
+            <li className="whitespace-nowrap flex justify-between px-10 h-full items-center border">
+              <span>Suspensão</span>
+              <span>{0}</span>
+            </li>
+            <li className="whitespace-nowrap flex justify-between px-10 h-full items-center border">
+              <span>Advertências escritas</span>
+              <span>{0}</span>
+            </li>
+            <li className="whitespace-nowrap flex justify-between px-10 h-full items-center border">
+              <span>Advertências verbais</span>
+              <span>{0}</span>
+            </li>
+            <li className="whitespace-nowrap flex justify-between px-10 h-full items-center border">
+              <span>Atraso</span>
+              <span>{0}</span>
+            </li>
+            <li className="whitespace-nowrap flex justify-between px-10 h-full items-center border">
+              <span>Ferias</span>
+              <span>{0}</span>
+            </li>
+          </ul>
         </section>
       </section>
     </>

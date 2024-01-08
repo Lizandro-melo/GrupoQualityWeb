@@ -228,3 +228,8 @@ Certas classes definidas para coisas especificas
     max-height: 66% /* 384px */;
   }
 
+
+  .scrollable-list {
+    max-height: 100vh; /* Defina a altura máxima como 100% da altura da tela */
+    overflow-y: auto; /* Adicione a barra de rolagem vertical quando necessário */
+  }
