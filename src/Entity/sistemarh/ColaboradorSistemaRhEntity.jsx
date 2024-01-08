@@ -6,8 +6,18 @@ export default class ColaboradorSistemaRhEntity {
   tipo;
   dataDemissao;
   dataAdmissao;
-  setor;
-  empresa;
-  estagiario;
+  setor = {
+    idSetor: "",
+    nome: "",
+  };
+  empresa = {
+    idEmpresa: "",
+    nome: "",
+  };
+  estagiario = {
+    dataAdmissao: "",
+    dataDemissao: "",
+    status: null,
+  };
   status;
 }

@@ -1,4 +1,5 @@
 import axios from "axios";
+import ColaboradorSistemaRhEntity from "../../Entity/sistemarh/ColaboradorSistemaRhEntity";
 
 export async function getColaboradorById(idColaborador, setColaborador) {
   await axios
@@ -8,12 +9,13 @@ export async function getColaboradorById(idColaborador, setColaborador) {
       {
         headers: {
           "Cache-Control": "no-cache",
-          "Pragma": "no-cache",
+          Pragma: "no-cache",
         },
       }
     )
     .then((response) => {
-      console.log(response.data);
+      const colaboradorNull = new ColaboradorSistemaRhEntity();
+      setColaborador(colaboradorNull);
       setColaborador(response.data);
     })
     .catch((err) => {
