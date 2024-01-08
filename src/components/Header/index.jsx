@@ -3,7 +3,13 @@ import { useState } from "react";
 
 export default function Header() {
   const [stateModalExit, setStateModalExit] = useState("hiddenModal");
-  const user = JSON.parse(Cookies.get("user"));
+  const user =
+    Cookies.get("user") === undefined
+      ? {
+          nome: "",
+          sobrenome: "",
+        }
+      : JSON.parse(Cookies.get("user"));
 
   function desconectar() {
     localStorage.clear();

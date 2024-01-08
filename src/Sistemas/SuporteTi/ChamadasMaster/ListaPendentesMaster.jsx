@@ -9,7 +9,6 @@ import {
   EnviarParaFinalizado,
 } from "../../../Controller/ticket/TicketsEnvios";
 import Cookies from "js-cookie";
-import ChamadasEntitysistemaos from "../../../Entity/sistemaos/ChamadasEntitySistemaos";
 
 export default function ListaPendentesMaster() {
   const [pentendes, setPendentes] = useState([]);
